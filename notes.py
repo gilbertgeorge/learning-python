@@ -1,3 +1,9 @@
+import random
+import math
+import sys
+import argparse
+
+
 def the_notes():
     input_string = input()
     string_list = str(input_string).split(' ')
@@ -120,10 +126,9 @@ def print_hi(print_name):
 
 
 if __name__ == '__main__':
-    # print_hi('PyCharm')
-    pi = 3.141592653589793
-    # print(f'{pi:.6}')
-    # nickname = input()
-    # profession = input()
-    # print(f"http://example.com/{nickname}/desirable/{profession}/profile")
+    pi = math.pi
+    print(pi)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-n", "--number")
+    print(f'parser: {parser}; arguments: {parser.parse_args()}')
 
