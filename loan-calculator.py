@@ -1,4 +1,5 @@
 import math
+import argparse
 
 
 def get_nominal_interest(rate, periods):
@@ -9,8 +10,15 @@ def get_number_payments(loan_principal, monthly_payment, loan_interest):
     nominal_interest = get_nominal_interest(loan_interest, 12)
     base = monthly_payment / (monthly_payment - nominal_interest * loan_principal)
     number = math.log(base, 1 + nominal_interest)
-    years = math.floor(math.ceil(number) / 12)
-    remaining_months = math.ceil(number) % 12
+    # years = math.floor(math.ceil(number) / 12)
+    # remaining_months = math.ceil(number) % 12
+    months_left = math.ceil(number)
+    return months_left
+
+
+def print_period(months_left):
+    years = math.floor(math.ceil(months_left) / 12)
+    remaining_months = math.ceil(months_left) % 12
     if remaining_months == 0 and years > 1:
         return f'{years} years'
     elif remaining_months == 0 and years == 1:
@@ -43,36 +51,89 @@ def get_loan_principal(annuity_amount, number_of_periods, loan_interest):
     return math.floor(result)
 
 
-def loan_calculator():
-    print('What do you want to calculate?')
-    print('type "n" for number of monthly payments,')
-    print('type "a" for annuity monthly payment amount,')
-    print('type "p" for loan principal:')
-    loan_principal_msg = 'Enter the loan principal:'
-    monthly_payment_msg = 'Enter the monthly payment:'
-    loan_interest_msg = 'Enter the loan interest:'
-    periods_msg = 'Enter the number of periods:'
-    annuity_msg = 'Enter the annuity payment:'
-    calculation_type = input()
+def get_overpayment(loan_principal, number_of_periods, payment):
+    return abs(int(loan_principal - (number_of_periods * payment)))
 
-    if calculation_type == 'n':
-        loan_principal = float(input(loan_principal_msg))
-        monthly_payment = int(input(monthly_payment_msg))
-        loan_interest = float(input(loan_interest_msg))
-        result = get_number_payments(loan_principal, monthly_payment, loan_interest)
-        print(f'It will take {result} to repay this loan!')
-    if calculation_type == 'a':
-        loan_principal = float(input(loan_principal_msg))
-        number_of_periods = int(input(periods_msg))
-        loan_interest = float(input(loan_interest_msg))
-        result = get_monthly_payment(loan_principal, number_of_periods, loan_interest)
-        print(f'Your monthly payment = {result}!')
-    if calculation_type == 'p':
-        annuity_amount = float(input(annuity_msg))
-        number_of_periods = int(input(periods_msg))
-        loan_interest = float(input(loan_interest_msg))
-        result = get_loan_principal(annuity_amount, number_of_periods, loan_interest)
-        print(f'Your loan principal = {result}!')
+
+def get_differentiated_payments(loan_principal, number_of_periods, loan_interest):
+    nominal_interest = get_nominal_interest(loan_interest, 12)
+    total_payment = 0
+    for current_period in range(1, number_of_periods+1):
+        current_payment = math.ceil((loan_principal / number_of_periods) + nominal_interest *
+                                    (loan_principal - ((loan_principal * (current_period - 1)) / number_of_periods)))
+        total_payment += current_payment
+        print(f'Month {current_period}: payment is {current_payment}')
+    overpayment = int(abs(loan_principal - total_payment))
+    print(f'\nOverpayment = {overpayment}')
+
+
+def loan_calculator():
+    invalid_params_msg = 'Incorrect parameters'
+    parser = argparse.ArgumentParser(description="This program calculates interest based on "
+                                                 "type and presence of provided arguments.")
+    parser.add_argument("-t", "--type", choices=['diff', 'annuity'],
+                        help="Type must be one specified from list")
+    parser.add_argument("--principal", default=None,
+                        help="Used for calculations of both types of payment. You can get its value if you know"
+                             " the interest, annuity payment, and number of months.")
+    parser.add_argument("--periods", default=None,
+                        help="Denotes the number of months needed to repay the loan. It's calculated based on the"
+                             " interest, annuity payment, and principal.")
+    parser.add_argument("--interest", default=None,
+                        help="Specified without a percent sign. Note that it can accept a floating-point value. "
+                             "The loan calculator can't calculate the interest, so it must always be provided.")
+    parser.add_argument("--payment", default=None,
+                        help="The monthly payment amount.")
+    args = parser.parse_args()
+
+    if args.type == 'annuity':
+        if not args.interest:
+            print(invalid_params_msg)
+        if args.principal and args.payment and args.interest:
+            loan_principal = float(args.principal)
+            monthly_payment = int(args.payment)
+            loan_interest = float(args.interest)
+            if loan_principal < 0 or monthly_payment < 0 or loan_interest < 0:
+                print(invalid_params_msg)
+            else:
+                number_of_periods = get_number_payments(loan_principal, monthly_payment, loan_interest)
+                print(f'It will take {print_period(number_of_periods)} to repay this loan!')
+                print(f'Overpayment = {get_overpayment(loan_principal, number_of_periods, monthly_payment)}')
+        if args.principal and args.periods and args.interest:
+            loan_principal = float(args.principal)
+            number_of_periods = int(args.periods)
+            loan_interest = float(args.interest)
+            if loan_principal < 0 or number_of_periods < 0 or loan_interest < 0:
+                print(invalid_params_msg)
+            else:
+                monthly_payment = get_monthly_payment(loan_principal, number_of_periods, loan_interest)
+                print(f'Your annuity payment = {monthly_payment}!')
+                print(f'Overpayment = {get_overpayment(loan_principal, number_of_periods, monthly_payment)}')
+        if args.payment and args.periods and args.interest:
+            annuity_amount = float(args.payment)
+            number_of_periods = int(args.periods)
+            loan_interest = float(args.interest)
+            if annuity_amount < 0 or number_of_periods < 0 or loan_interest < 0:
+                print(invalid_params_msg)
+            else:
+                loan_principal = get_loan_principal(annuity_amount, number_of_periods, loan_interest)
+                print(f'Your loan principal = {loan_principal}!')
+                print(f'Overpayment = {get_overpayment(loan_principal, number_of_periods, annuity_amount)}')
+    elif args.type == 'diff':
+        if args.payment:
+            print(invalid_params_msg)
+        elif args.principal and args.periods and args.interest:
+            loan_principal = float(args.principal)
+            number_of_periods = int(args.periods)
+            loan_interest = float(args.interest)
+            if loan_principal < 0 or number_of_periods < 0 or loan_interest < 0:
+                print(invalid_params_msg)
+            else:
+                get_differentiated_payments(loan_principal, number_of_periods, loan_interest)
+        else:
+            print(invalid_params_msg)
+    else:
+        print(invalid_params_msg)
 
 
 if __name__ == '__main__':
