@@ -23,7 +23,7 @@ if __name__ == '__main__':
     parser.add_argument("-f", "--file")
     args = parser.parse_args()
     text = get_encoded_text(args.file)
-    offset_string = args.file.split('.')[0]
+    offset_string = args.file.split('.')[0].split('\\')[1]
     offset = -int(offset_string)
     decoded_text = decode_caesar_cipher(text, offset)
     print(decoded_text)
