@@ -85,9 +85,42 @@ class Lightbulb:
     def __init__(self):
         self.state = 'off'
 
+    def __repr__(self):
+        return f'Lightbulb({self.state})'
+
     def change_state(self):
         self.state = 'on' if self.state == 'off' else 'off'
         print(f'Turning the light {self.state}')
+
+
+class Book:
+    def __init__(self, author, title, price, book_id):
+        self.author = author
+        self.title = title
+        self.price = price
+        self.book_id = book_id
+
+    def __repr__(self):
+        return f'{self.title} by {self.author}. ${self.price}. [{self.book_id}]'
+
+
+class Sun:
+    n = 0  # number of instances of this class
+
+    def __new__(cls):
+        if cls.n <= 0:
+            cls.n += 1
+            return object.__new__(cls)  # create new object of the class
+
+
+class Puppy:
+    n_puppies = 0
+    LIMIT = 10
+
+    def __new__(cls):
+        if cls.n_puppies < cls.LIMIT:
+            cls.n_puppies += 1
+            return object.__new__(cls)
 
 
 if __name__ == '__main__':
@@ -156,4 +189,6 @@ if __name__ == '__main__':
     light.change_state()
     light.change_state()
     light.change_state()
+    print(light)
+
 

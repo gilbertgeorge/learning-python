@@ -1,5 +1,5 @@
 import string
-
+import json
 
 def dictionary():
     birds = {"pigeon": 12, "sparrow": 5, "red crossbill": 1}
@@ -92,5 +92,19 @@ if __name__ == '__main__':
     # print(new_dict['a'] + new_dict['b'])
 
     # double()
-    walks_average()
+    # walks_average()
+
+    first_family = {"wife": "Janet", "wife's mother": "Katie", "wife's father": "George"}
+    second_family = {"husband": "Leon", "husband's mother": "Eva", "husband's father": "Gaspard",
+                     "husband's sister": "Isabelle"}
+    # first_family = json.loads(input())
+    # second_family = json.loads(input())
+
+    print(first_family)
+    print(second_family)
+    family = dict(first_family)
+    family.update(second_family)
+    print(family)
+    print(first_family)
+    print(second_family)
 
