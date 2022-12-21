@@ -1,3 +1,11 @@
+def get_bot_move(pencils_left):
+    target = (pencils_left - 1) % 4
+    if target == 0:
+        # print('unfortunate')
+        target = 1
+    return target
+
+
 def get_valid_remove_pencils(pencils_left):
     valid_remove_pencils = [1, 2, 3]
     while True:
@@ -49,7 +57,12 @@ def pencil():
         while number_of_pencils > 0:
             print('|' * number_of_pencils)
             print(f"{valid_players[player_index]}'s turn:")
-            remove_pencils = get_valid_remove_pencils(number_of_pencils)
+            if valid_players[player_index] == 'Jack':
+                # print('bot move')
+                remove_pencils = get_bot_move(number_of_pencils)
+                print(remove_pencils)
+            else:
+                remove_pencils = get_valid_remove_pencils(number_of_pencils)
             number_of_pencils -= remove_pencils
             player_index = (player_index + 1) % 2
     print(f'{valid_players[player_index]} won!')
