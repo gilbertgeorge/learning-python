@@ -78,6 +78,15 @@ def walks_average():
     print(average)
 
 
+def frequency_count():
+    words = input()
+    word_list = [word.lower() for word in words.split()]
+    word_dictionary = {entry: word_list.count(entry) for entry in word_list}
+    # print(word_dictionary)
+    for word in word_dictionary:
+        print(f'{word} {word_dictionary[word]}')
+
+
 if __name__ == '__main__':
     # dictionary()
     # sets()
@@ -105,6 +114,49 @@ if __name__ == '__main__':
     family = dict(first_family)
     family.update(second_family)
     print(family)
-    print(first_family)
-    print(second_family)
 
+    # key check
+    print('wife' in family and 'husband' in family)
+    # value check
+    print('Janet' in family.values() and 'Leon' in family.values())
+
+    # iteration
+    tiny_dict = {'a': 1, 'b': 2, 'c': 3}
+    for obj in tiny_dict:
+        print(f'{obj}:{tiny_dict[obj]}')
+    for obj in tiny_dict.items():
+        print(obj)
+        print(f'{obj[0]} {obj[1]}')
+
+    # list comprehension
+    fruits = ["apple", "banana", "cherry", "kiwi", "mango"]
+    new_list = [x for x in fruits if "a" in x]
+    print(new_list)
+
+    # 2d list comprehension
+    numbers = [['1', '2', '3'], ['4', '5'], ['6', '7', '8', '9']]
+    all_numbers = [number for number_group in numbers for number in number_group if int(number) % 2 == 0]
+    print(all_numbers)
+
+    # dictionary comprehension
+    dictionary = {key + 5: f'[{key}]some_value' for key in range(3)}
+    print(dictionary)
+
+    planets_diameter_km = {'Earth': 12742, 'Mars': 6779}
+    planets_diameter_mile = {key: round(value / 1.60934, 2) for (key, value) in
+                             planets_diameter_km.items()}
+    print(planets_diameter_mile)
+
+    fruits = ['apple', 'kiwi', 'banana', 'orange', 'apricot']
+    fruit_letters = {fruit: len(fruit) for fruit in fruits if len(fruit) > 5}
+    print(fruit_letters)
+
+    # frequency_count()
+
+    # some_iterable = input().split()
+    # some_dictionary = {word.upper(): word.lower() for word in some_iterable}
+    # print(some_dictionary)
+
+    the_float = float(input())
+    the_round = int(input())
+    print(f'{round(the_float, the_round)}')
