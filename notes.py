@@ -125,9 +125,32 @@ def print_hi(print_name):
     print(f'Hi {print_name}')
 
 
+def check(obj1, obj2):
+    print(obj1 is obj2)
+
+
+def create_function(n):
+    return lambda x: n * x
+
+
 if __name__ == '__main__':
     pi = math.pi
+    pi2 = pi
+    check(pi, pi2)
     print(pi)
+
+    print((lambda x: 'even' if x % 2 == 0 else 'odd')(3))
+    # func = lambda x, y: (x + y) % 2
+    # print(func(1, 10))
+
+    # Creating a function that doubles its argument
+    doubler = create_function(2)
+    # This function will triple its argument
+    tripler = create_function(3)
+    print(doubler(2))   # 4
+    print(tripler(2))   # 6
+
+    # argument parsing
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--number")
     print(f'parser: {parser}; arguments: {parser.parse_args()}')
