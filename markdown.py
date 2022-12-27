@@ -34,6 +34,30 @@ def md_newline():
     return '\n'
 
 
+def md_list(list_type):
+    list_text = ''
+    while True:
+        rows = int(input('Number of rows: '))
+        if rows > 0:
+            for row in range(1, rows + 1):
+                row_text = input(f'Row #{row}: ')
+                if list_type == 'unordered-list':
+                    list_text += f'* {row_text}\n'
+                elif list_type == 'ordered-list':
+                    list_text += f'{row}. {row_text}\n'
+            return list_text
+        else:
+            print('The number of rows should be greater than zero')
+
+
+def write_results_to_file(text):
+    # FILENAME = 'output.md'
+    FILENAME = 'supplemental\\output.md'
+    file = open(FILENAME, 'w')
+    file.write(text)
+    file.close()
+
+
 def markdown():
     available_formatters = ['plain', 'bold', 'italic', 'header', 'link', 'inline-code', 'ordered-list',
                             'unordered-list', 'new-line']
@@ -56,10 +80,13 @@ def markdown():
                 md_text += md_inline(command)
             elif command == 'link':
                 md_text += md_link()
+            elif command == 'ordered-list' or command == 'unordered-list':
+                md_text += md_list(command)
             print(md_text)
         elif command == '!help':
             print(help_msg)
         elif command == '!done':
+            write_results_to_file(md_text)
             break
 
 
