@@ -1,17 +1,17 @@
 import requests
+from bs4 import BeautifulSoup
 
 
 def make_request(url):
-    # http://api.quotable.io/quotes/-4WQ_JwFWI (valid)
-    # http://api.quotable.io/quotes/asdfgh (invalid)
-    # http://api.quotable.io/authors (invalid)
-    KEY_TO_SEARCH = 'content'
-    invalid_message = 'Invalid quote resource!'
-    r = requests.get(url)
-    if r:
-        json_response = r.json()
-        if KEY_TO_SEARCH in json_response:
-            print(json_response[KEY_TO_SEARCH])
+    invalid_message = 'Invalid movie page!'
+    res = requests.get(url)
+    if res:
+        soup = BeautifulSoup(res.content, 'html.parser')
+        title = soup.find('h1')
+        description = soup.find('span', {'data-testid': 'plot-l'})
+        if title and description:
+            result = dict({'title': title.text, 'description': description.text})
+            print(f'{result}')
         else:
             print(invalid_message)
     else:
