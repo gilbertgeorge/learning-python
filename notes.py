@@ -125,7 +125,23 @@ def print_hi(print_name):
     print(f'Hi {print_name}')
 
 
+def find_years():
+    INTEREST = 0.071
+    AMOUNT_LIMIT = 700000
+    years = 0
+    amount = int(input())
+    amount_with_interest = amount
+
+    while amount_with_interest < AMOUNT_LIMIT:
+        amount_with_interest += amount_with_interest * INTEREST
+        years += 1
+
+    return years
+
+
 if __name__ == '__main__':
+    # print(find_years())
+
     # argument parsing
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--number")
