@@ -1,0 +1,27 @@
+
+
+
+
+
+
+Lightning typically forms with the aid of warm air, which is why it has historically been rare in the Arctic.Credit: Tommy Eliassen/Science Photo Library
+
+
+Lightning is striking the Arctic many times more often than it did a decade ago, a study suggests — and the rate could soon double. The findings demonstrate yet another way Earth’s climate could be changing as the planet warms, although not all researchers agree that the trend is real.Robert Holzworth, an atmospheric physicist at the University of Washington in Seattle and leader of the study, defends the findings. “We’re seeing a symptom of global climate change,” he says. Holzworth is director of the World Wide Lightning Location Network (WWLLN), the collection of ground-based sensors that measured the data. He reported the results on 8 December at a virtual meeting of the American Geophysical Union (and published them before peer review as a preprint1).
+
+The Arctic is burning like never before — and that’s bad news for climate change
+Another lightning-detection network, whose records do not extend as far back as those Holzworth studied, does not find the same increase.Whether or not lightning is increasing in the Arctic could have a significant impact on the region. The past two years have set records for the largest area of land burnt by wildfires — some of them ignited by lightning — and the most carbon dioxide emitted in the Arctic since records began. More lightning would mean even more chances that wildfires will start, which could in turn put even more climate-altering soot and gases into the air.Polar lightningLightning forms when ice crystals inside convecting storm clouds — those filled with roiling air currents fed by warm air — collide and transfer electrical charge. A charge separation builds up until it hits a threshold, and a lightning stroke is released. Some researchers have predicted that global warming will lead to more convective storms and lightning worldwide as air and ocean temperatures rise2. However, some modelling studies suggest the opposite3.Nonetheless, the World Meteorological Organization in Geneva, Switzerland, added lightning to its list of ‘essential climate variables’ in 2016, meaning that observations of lightning could help researchers to track the changing global climate.
+
+
+
+
+Source: Robert Holzworth/University of Washington
+
+
+The Arctic is warming faster than the rest of the planet, so changes in lightning might be most apparent there. August 2019 saw the most northerly stroke ever detected — just 52 kilometres from the North Pole — according to the Finnish company Vaisala, headquartered in Vantaa, which runs a lightning-detection network. And a July 2014 storm over the Canadian Arctic caused more than 15,000 lightning strokes north of the Arctic Circle4.Lightning in the Arctic is normally rare, accounting for around 0.5% of all global strokes detected by the WWLLN.But Holzworth and his colleagues found that the number of annual summertime lightning strokes above a latitude of 65° N rose from around 35,000 in 2010 to nearly 250,000 this year (see ‘Arctic lightning rising’). The scientists studied the months of June, July and August, when nearly all Arctic lightning occurs. They found increasing numbers of lightning strokes across the Arctic, with most of the activity happening around northern Siberia.Verifying a trendTracking trends in lightning can be difficult because detection networks grow more efficient over time, as advanced sensors are added. So Holzworth and his colleagues ran several analyses to confirm that there was more Arctic lightning happening, not just more being detected. “There’s no question about it,” he says.
+
+Scientists probe lightning hotspot to predict future strikes
+Vaisala’s network has not recorded the same trend. Its data go back only to 2012, rather than to 2010. But “we don’t see an unambiguous trend toward more lightning at more extreme latitudes”, says Ryan Said, a meteorologist and lightning analyst in Vaisala’s office in Louisville, Colorado.In places that see relatively little lightning, such as the Arctic, just a couple of intense thunderstorms can cause a proportionally huge rise in the total number of lightning strokes detected in a given year, Said notes. With so much year-to-year variability, it can be hard to isolate long-term trends.Some researchers in the community say Holzworth’s findings make sense. The work “supports the wider view of a lightning-richer future for the Arctic”, says Sander Veraverbeke, an Earth-systems scientist at the Free University of Amsterdam. In 2017, Veraverbeke and his colleagues reported that lightning was igniting more wildfires, farther north, than in the past in parts of Alaska and Canada5.
+
+Arctic sea ice hits second-lowest level on record
+One way to verify Holzworth’s work would be to survey Indigenous and other communities living at high latitudes, says Jessica McCarty, a geographer at Miami University in Oxford, Ohio, who studies Arctic wildfire.Another way is to follow up with further lightning-detection studies. Holzworth’s work shows “an interesting correlation” with changes in global temperature, says Antti Mäkelä, a lightning specialist at the Finnish Meteorological Institute in Helsinki. By next year, Mäkelä and his colleagues will have 20 years of data from a lightning-detection system that spans Norway, Sweden, Finland and Estonia6 — and they plan to analyse the data set to see whether there has been an increase in lightning in northern Scandinavia.
