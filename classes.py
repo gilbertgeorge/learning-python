@@ -43,6 +43,23 @@ class Person:
         print(f'Hello, I am {self.name}!')
 
 
+class PersonHeight:
+    def __repr__(self):
+        return f'Name:({self.name} Height:{self.height})'
+
+    def __init__(self, name, height):
+        self.name = name
+        self.height = height
+
+    def __iadd__(self, height):
+        self.height += height
+        return self
+
+    def __isub__(self, height):
+        self.height -= height
+        return self
+
+
 class Ship:
     def __init__(self, name, capacity):
         self.name = name
@@ -123,7 +140,79 @@ class Puppy:
             return object.__new__(cls)
 
 
+class ComplexNumber:
+    def __str__(self):
+        if self.im_part < 0:
+            sign = "-"
+        else:
+            sign = "+"
+        string = "{} {} {}i".format(self.real_part, sign, abs(self.im_part))
+        return string
+
+    def __init__(self, real_part, im_part):
+        self.real_part = real_part
+        self.im_part = im_part
+
+    def __add__(self, other):
+        """Addition of complex numbers."""
+        real = self.real_part + other.real_part
+        imaginary = self.im_part + other.im_part
+        return ComplexNumber(real, imaginary)
+
+    def __mul__(self, other):
+        """Multiplication of complex numbers."""
+        real = (self.real_part * other.real_part -
+                self.im_part * other.im_part)
+        imaginary = (self.real_part * other.im_part +
+                     other.real_part * self.im_part)
+        return ComplexNumber(real, imaginary)
+
+    def __sub__(self, other):
+        real = self.real_part - other.real_part
+        imaginary = self.im_part - other.im_part
+        return ComplexNumber(real, imaginary)
+
+    def __truediv__(self, other):
+        reciprocal = ComplexNumber((other.real_part/(other.real_part**2 + other.im_part**2)),
+                                   (-other.im_part/(other.real_part**2 + other.im_part**2)))
+        return ComplexNumber(self.real_part, self.im_part) * reciprocal
+
+    def __iadd__(self, other):
+        """Addition with assignment (+=) for complex numbers."""
+        self.real_part += other.real_part
+        self.im_part += other.im_part
+        return self
+
+    def __eq__(self, other):
+        """Compare two complex numbers for equality (==)."""
+        return ((self.real_part == other.real_part) and
+               (self.im_part == other.im_part))
+
+
 if __name__ == '__main__':
+    person_one = PersonHeight('tim', 20)
+    person_two = PersonHeight('steve', 40)
+    person_one += 10
+    person_two += 30
+    print(person_one)
+    print(person_two)
+    z1 = ComplexNumber(1, 1)
+    z2 = ComplexNumber(-1, 2)
+    print(f'z1={z1}')
+    print(f'z2={z2}')
+    z3 = z1 + z2
+    z4 = z1 * z2
+    print(f'z3={z3}')
+    print(f'z4={z4}')
+    z1 += z2
+    print(f'z1+z2={z1}')
+    print(f'(z1 == z2) : {z1 == z2}')
+    print(f'(z1 == z3) : {z1 == z3}')
+    z5 = z2 - z1
+    print(z5)
+    z6 = z2 / z1
+    print(z6)
+
     print('hi')
     my_class = MyClass()
     print(f'my_class no init {my_class.get_value()}')
