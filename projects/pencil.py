@@ -65,7 +65,7 @@ def pencil():
                 remove_pencils = get_valid_remove_pencils(number_of_pencils)
             number_of_pencils -= remove_pencils
             player_index = (player_index + 1) % 2
-    print(f'{valid_players[player_index]} won!')
+        print(f'{valid_players[player_index]} won!')
 
 
 if __name__ == '__main__':

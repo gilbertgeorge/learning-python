@@ -29,7 +29,7 @@ def convert_json():
 
 
 def decode_json():
-    with open("supplemental\\movies.json", "r") as json_file:
+    with open("../supplemental/movies.json", "r") as json_file:
         movie_dict_from_json = json.load(json_file)
 
     print(movie_dict_from_json)

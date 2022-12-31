@@ -1,8 +1,3 @@
-from hangman import hangman
-from calc import calculator
-import random
-
-
 def contains(text, pattern):
     comparisons = 0
     for i in range(len(text) - len(pattern) + 1):

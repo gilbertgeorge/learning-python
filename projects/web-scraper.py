@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 
 def write_results_to_file(current_page, file_name, text):
-    file_name = os.path.join('supplemental', 'scrape', 'step5', current_page, file_name)
+    file_name = os.path.join('../supplemental', 'scrape', 'step5', current_page, file_name)
     # file_name = os.path.join(current_page, file_name)
     file = open(file_name, 'wb')
     file.write(text)
@@ -14,7 +14,7 @@ def write_results_to_file(current_page, file_name, text):
 
 def create_page_directory(current_page):
     directory_name = f'Page_{current_page}'
-    directory_name = os.path.join('supplemental', 'scrape', 'step5', directory_name)
+    directory_name = os.path.join('../supplemental', 'scrape', 'step5', directory_name)
     os.mkdir(directory_name)
 
 

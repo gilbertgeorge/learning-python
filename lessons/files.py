@@ -1,5 +1,5 @@
 def create_file():
-    test_file = open('supplemental\\animals.txt', 'w', encoding='UTF-16')
+    test_file = open('../supplemental/animals.txt', 'w', encoding='UTF-16')
     test_file.close()
 
 
@@ -43,7 +43,7 @@ def write_file(file_name, text):
 
 
 def write_lines():
-    file = 'supplemental\\names.txt'
+    file = '../supplemental/names.txt'
     names = ['Kate\n', 'Alexander\n', 'Oscar\n', 'Mary\n']
     print(f'Writing {names} to {file}')
     name_file = open(file, 'a', encoding='utf-8')

@@ -52,7 +52,7 @@ def md_list(list_type):
 
 def write_results_to_file(text):
     # FILENAME = 'output.md'
-    FILENAME = 'supplemental\\output.md'
+    FILENAME = '../supplemental/output.md'
     file = open(FILENAME, 'w')
     file.write(text)
     file.close()
