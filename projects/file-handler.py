@@ -8,6 +8,7 @@ class FileHandler:
         self.filename = filename
         self.files = self.get_files()
         self.filtered_files = {}
+        self.duplicate_files = {}
 
     def __str__(self):
         return f'File:({self.filename})'
@@ -58,8 +59,17 @@ class FileHandler:
                     print(f'Hash: {h_key}')
                     for each_dupe_file in h_value:
                         print(f'{index}. {each_dupe_file}')
+                        self.duplicate_files[index] = each_dupe_file
                         index += 1
             print()
+
+    def delete_duplicates(self, files_to_delete):
+        total_size = 0
+        for each_file in files_to_delete:
+            size = self.files[self.duplicate_files[each_file]]
+            total_size += size
+            os.remove(self.duplicate_files[each_file])
+        print(f'Total freed up space: {total_size} bytes')
 
 
 def get_sort_options():
@@ -77,6 +87,39 @@ def get_sort_options():
             print('Wrong option')
 
 
+def get_duplicate_options():
+    while True:
+        print('Check for duplicates?')
+        dupe_check = input()
+        if dupe_check == 'yes':
+            return True
+        elif dupe_check == 'no':
+            return False
+        else:
+            print('Wrong option')
+
+
+def get_delete_options(duplicate_files):
+    while True:
+        print('Delete files?')
+        delete_files = input()
+        if delete_files == 'yes':
+            while True:
+                print('Enter file numbers to delete:')
+                try:
+                    file_numbers = [int(num) for num in input().split()]
+                    if all(num in duplicate_files.keys() for num in file_numbers) and len(file_numbers) > 0:
+                        return file_numbers
+                    else:
+                        print('Wrong format')
+                except ValueError:
+                    print('Wrong format')
+        elif delete_files == 'no':
+            return
+        else:
+            print('Wrong option')
+
+
 def file_handler():
     """python3 file-handler.py <filename>"""
     parser = argparse.ArgumentParser(description='File Handler')
@@ -87,17 +130,14 @@ def file_handler():
         sorting_dictionary = get_sort_options()
         handler.print_file_list_by_extension(sorting_dictionary['format'],
                                              sorting_dictionary['option'])
-        while True:
-            print('Check for duplicates?')
-            dupe_check = input()
-            if dupe_check == 'yes':
-                handler.check_duplicates()
-                break
-            elif dupe_check == 'no':
-                break
-            else:
-                print('Wrong option')
 
+        get_duplicates = get_duplicate_options()
+        if get_duplicates:
+            handler.check_duplicates()
+
+        files_to_delete = get_delete_options(handler.duplicate_files)
+        if files_to_delete:
+            handler.delete_duplicates(files_to_delete)
     else:
         print('Directory is not specified')
 
