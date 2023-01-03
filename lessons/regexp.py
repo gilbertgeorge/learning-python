@@ -197,6 +197,62 @@ def alien_name(word):
         return False
 
 
+def mr_smith(word):
+    regex = r'[A-Z][\w\s]*\sSmith'
+    match = re.match(regex, word)
+    if match:
+        return True
+    else:
+        return False
+
+
+def quantifiers():
+    template = "wo+w!"  # matches "wow!" with one or more 'o'
+    one = re.match(template, "wow!")  # match: one 'o' character encountered
+    two = re.match(template, "wooooooooooow!")  # match: many (11) 'o' characters encountered
+    three = re.match(template, "ww!")  # no match: no 'o' character encountered
+    print(one)
+    print(two)
+    print(three)
+
+    template = ".+Jack Sparrow"  # matches the string "Jack Sparrow" with some preceding characters
+    print(re.match(template, "Captain Jack Sparrow"))  # match: there are some characters before "Jack"
+    print(re.match(template, "Jack Sparrow"))  # no match: the string starts with "Jack"
+
+    template = "Louis [IXV]+"
+    print(re.match(template, "Louis III"))  # match
+    print(re.match(template, "Louis XVI"))  # match
+    print(re.match(template, "Louis "))  # no match
+
+    template = "go*d"
+    print(re.match(template, "good"))  # match: double 'o' occured
+    print(re.match(template, "god"))  # match: one 'o' occured
+    print(re.match(template, "gd"))  # match: no 'o' occured, but the rest of the string matches the template
+    print(re.match(template, "gud"))  # no match: 'u' is not in the template
+
+    template = "\w{5}"  # matches a sequence of exactly 5 alphanumeric characters
+    print(re.match(template, "doggy"))  # match: 5 letters sequence
+    print(re.match(template, "dog"))  # no match: there're only 3 alphanumeric characters
+    print(re.match(template, "a dog"))  # no match: space doesn't match \w
+
+    template = "\d{5,10}"  # matches any sequence of digits with length from 5 to 10
+    print(re.match(template, "12345"))  # match: 5 digits
+    print(re.match(template, "1234567890"))  # match: 10 digits
+    print(re.match(template, "12345678"))  # match: 8 digits
+    print(re.match(template, "1234"))  # no match: only 4 digits
+
+    template = "i'm just a po{2,}r boy"  # there should be at least 2 'o' in the string
+    print(re.match(template, "i'm just a poor boy"))  # match: 2 'o'
+    print(re.match(template, "i'm just a pooooooooor boy"))  # match: 9 'o'
+    print(re.match(template, "i'm just a por boy"))  # no match
+
+    template = "i need no sy{,3}mpathy"  # there should be no more than 3 'y'
+    print(re.match(template, "i need no sympathy"))  # match: 1 'y'
+    print(re.match(template, "i need no syyympathy"))  # match: 3 'y'
+    print(re.match(template, "i need no smpathy"))  # match: zero occurrences match the quantifier too
+    print(re.match(template, "i need no syyyympathy"))  # no match: 4 'y'
+
+
 if __name__ == '__main__':
     # examples1()
     # examples2()
@@ -217,6 +273,10 @@ if __name__ == '__main__':
     # is_dollar_amount()
 
     # print(the_word_present('theft'))
-    print(alien_name('a11~'))
-    print(alien_name('a1~'))
+    # print(alien_name('a11~'))
+    # print(alien_name('a1~'))
+
+    # quantifiers()
+
+    print(mr_smith('Will Smith'))
 
