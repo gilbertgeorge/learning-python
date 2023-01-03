@@ -57,7 +57,7 @@ def sentiment_analysis():
 
 
 def word_tokens():
-    text = "I have got a cat. My cat's name is C-3PO. He's golden."
+    text = "I have got a cat. My cat's name is C-3PO. He's golden. We're going to have to practice, alot."
     wpt = WordPunctTokenizer()
 
     print(word_tokenize(text))
@@ -82,6 +82,9 @@ def word_tokens():
     print(regexp_tokenize(text, "[0-9A-z'\-]+"))
     # ['I', 'have', 'got', 'a', 'cat', 'My', "cat's", 'name', 'is', 'C-3PO', "He's", 'golden']
 
+    print()
+    print(regexp_tokenize(text, "[^\s]+"))
+
 
 def testing():
     text = 'If you want to be happy, learn programming!'
@@ -94,5 +97,5 @@ if __name__ == '__main__':
     # named_entity_recognition()
     # sentiment_analysis()
 
-    # word_tokens()
-    testing()
+    word_tokens()
+    # testing()
