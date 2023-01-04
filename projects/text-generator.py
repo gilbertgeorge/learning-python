@@ -1,3 +1,4 @@
+import string
 from nltk import word_tokenize, regexp_tokenize, bigrams
 from collections import Counter
 import random
@@ -58,12 +59,28 @@ class TextGenerator:
             sentence = ''
             for index in range(10):
                 next_word = self.markov_chain[seed_word]
-                # probable_tail = next(iter(next_word))
                 tails = list(next_word.keys())
                 tail_weights = list(next_word.values())
                 probable_tail = random.choices(tails, tail_weights)[0]
                 sentence += f'{probable_tail} '
                 seed_word = probable_tail
+            print(sentence.strip())
+
+    def print_better_sentences(self):
+        end_sentence = ['.', '?', '!']
+        for _ in range(10):
+            seed_word = random.choice([x for x in self.corpus_tokens if
+                                       (x[0] in string.ascii_uppercase and x[-1] not in end_sentence)])
+            sentence = f'{seed_word} '
+            word_count = 1
+            while word_count < 5 or seed_word[-1] not in end_sentence:
+                next_word = self.markov_chain[seed_word]
+                tails = list(next_word.keys())
+                tail_weights = list(next_word.values())
+                probable_tail = random.choices(tails, tail_weights)[0]
+                sentence += f'{probable_tail} '
+                seed_word = probable_tail
+                word_count += 1
             print(sentence.strip())
 
     def get_token(self):
@@ -123,7 +140,8 @@ def text_generator():
     # tg.print_bi_gram_stats()
     # tg.get_bi_gram()
     # tg.get_markov_chain()
-    tg.print_predictive_sentences()
+    # tg.print_predictive_sentences()
+    tg.print_better_sentences()
 
 
 if __name__ == '__main__':
