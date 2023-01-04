@@ -1,4 +1,5 @@
 from nltk import word_tokenize, regexp_tokenize, bigrams
+from collections import Counter
 
 
 class TextGenerator:
@@ -7,6 +8,7 @@ class TextGenerator:
         self.corpus_contents = self.read_file()
         self.corpus_tokens = self.read_tokens_from_corpus()
         self.bi_grams = self.generate_bi_grams()
+        self.markov_chain = self.generate_markov_chain()
 
     def read_file(self):
         file = open(self.corpus_file_name, "r", encoding="utf-8")
@@ -22,6 +24,16 @@ class TextGenerator:
         bi_grams = list(bigrams(self.corpus_tokens))
         return bi_grams
 
+    def generate_markov_chain(self):
+        bi_gram_dict = {}
+        for token in self.bi_grams:
+            bi_gram_dict.setdefault(token[0], []).append(token[1])
+        markov_dict = {}
+        for bi_gram in bi_gram_dict:
+            frequencies = dict(Counter(bi_gram_dict[bi_gram]).most_common(7))
+            markov_dict[bi_gram] = frequencies
+        return markov_dict
+
     def print_token_stats(self):
         all_tokens = len(self.corpus_tokens)
         unique_tokens = len(set(self.corpus_tokens))
@@ -30,9 +42,9 @@ class TextGenerator:
         print(f'Unique tokens: {unique_tokens}')
         print()
 
-    def print_bigram_stats(self):
-        number_bigrams = len(self.bi_grams)
-        print(f'Number of bigrams: {number_bigrams}')
+    def print_bi_gram_stats(self):
+        number_bi_grams = len(self.bi_grams)
+        print(f'Number of bigrams: {number_bi_grams}')
         print()
 
     def get_token(self):
@@ -50,7 +62,7 @@ class TextGenerator:
             else:
                 break
 
-    def get_bigram(self):
+    def get_bi_gram(self):
         while True:
             user_input = input()
             if user_input != 'exit':
@@ -66,6 +78,22 @@ class TextGenerator:
             else:
                 break
 
+    def get_markov_chain(self):
+        while True:
+            user_input = input()
+            if user_input != 'exit':
+                try:
+                    selected_head = self.markov_chain[user_input]
+                    print(f'Head: {user_input}')
+                    for tail in selected_head.keys():
+                        print(f'Tail: {tail}\tCount: {selected_head[tail]}')
+                except KeyError:
+                    print(f'Head: {user_input}')
+                    print('Key Error. The requested word is not in the model. Please input another word.')
+            else:
+                break
+            print()
+
 
 def text_generator():
     # ../supplemental/corpora/corpus.txt
@@ -73,8 +101,9 @@ def text_generator():
     tg = TextGenerator(file_name)
     # tg.print_token_stats()
     # tg.get_token()
-    tg.print_bigram_stats()
-    tg.get_bigram()
+    # tg.print_bi_gram_stats()
+    # tg.get_bi_gram()
+    tg.get_markov_chain()
 
 
 if __name__ == '__main__':

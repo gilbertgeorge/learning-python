@@ -1,5 +1,7 @@
 import string
 import json
+from collections import Counter, defaultdict
+
 
 def dictionary():
     birds = {"pigeon": 12, "sparrow": 5, "red crossbill": 1}
@@ -87,10 +89,67 @@ def frequency_count():
         print(f'{word} {word_dictionary[word]}')
 
 
+def frequency_dictionary():
+    text = ("Gambit is a chess opening in which a player risks one or more pawns "
+            "or a minor piece to gain an advantage in position")
+    text_list = text.lower().split()
+    freq_dict = {}
+
+    for word in text_list:
+        # set the default value to 0
+        freq_dict.setdefault(word, 0)
+        # increment the value by 1
+        freq_dict[word] += 1
+
+    # value is frequency of each key
+    print(freq_dict["gambit"])  # 1
+    print(freq_dict["a"])  # 3
+    print(freq_dict)
+
+    # value is a list of indices for each key
+    index_dict = {}
+    for index, word in enumerate(text_list):
+        index_dict.setdefault(word, []).append(index)
+    print(index_dict["or"])  # [11, 14]
+    print(index_dict)
+
+    # # dict of sets
+    # dict_sets = {}
+    # for index, word in enumerate(text_list):
+    #     if dict_sets[word] is not None:
+    #         dict_sets[word]['Count'] += 1
+    #     else:
+    #         default_index = {'Name': word, 'Count': 0}
+    #         dict_sets.setdefault(word, set()).add(default_index)
+    # print(dict_sets)
+
+    print('collections frequency counter')
+    freq_counter = Counter(text_list)
+    print(freq_counter)
+    print('top 5')
+    print(freq_counter.most_common(5))
+
+
+def fruit_test():
+    fruit_dictionary = {}
+    fruit_dictionary.setdefault("apple", "green")
+    fruit_dictionary.setdefault("banana", "yellow")
+    fruit_dictionary.setdefault("orange", "orange")
+    print(fruit_dictionary)
+    print(fruit_dictionary.setdefault("apple", "red"))
+
+
+def mississippi():
+    pass
+
+
 if __name__ == '__main__':
     # dictionary()
     # sets()
     # fromkeys()
+
+    frequency_dictionary()
+    fruit_test()
 
     # flowers = {'Alex': 'field flowers', 'Kate': 'daffodil', 'Eva': 'artichoke flower', 'Daniel': 'tulip'}
     # test_flowers = dict({'Alex': 'field flowers', 'Kate': 'daffodil', 'Eva': 'artichoke flower', 'Daniel': 'tulip'})

@@ -139,11 +139,22 @@ def find_years():
     return years
 
 
+def hours_of_work():
+    hours = int(input())
+    if hours < 2:
+        print("That's rare nowadays!")
+    elif 2 <= hours < 4:
+        print('This seems reasonable')
+    else:
+        print("Don't forget to take breaks!")
+
+
 if __name__ == '__main__':
     # print(find_years())
 
     # argument parsing
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-n", "--number")
-    print(f'parser: {parser}; arguments: {parser.parse_args()}')
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument("-n", "--number")
+    # print(f'parser: {parser}; arguments: {parser.parse_args()}')
 
+    hours_of_work()
