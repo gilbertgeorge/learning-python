@@ -1,5 +1,7 @@
 from nltk import word_tokenize, regexp_tokenize, bigrams
 from collections import Counter
+import random
+import os
 
 
 class TextGenerator:
@@ -11,10 +13,13 @@ class TextGenerator:
         self.markov_chain = self.generate_markov_chain()
 
     def read_file(self):
-        file = open(self.corpus_file_name, "r", encoding="utf-8")
-        text = file.read()
-        file.close()
-        return text
+        if os.path.isfile(self.corpus_file_name):
+            file = open(self.corpus_file_name, "r", encoding="utf-8")
+            text = file.read()
+            file.close()
+            return text
+        else:
+            print(f'{self.corpus_file_name} is not a valid file')
 
     def read_tokens_from_corpus(self):
         tokens = regexp_tokenize(self.corpus_contents, "[^\s]+")
@@ -46,6 +51,20 @@ class TextGenerator:
         number_bi_grams = len(self.bi_grams)
         print(f'Number of bigrams: {number_bi_grams}')
         print()
+
+    def print_predictive_sentences(self):
+        seed_word = random.choice(self.corpus_tokens)
+        for _ in range(10):
+            sentence = ''
+            for index in range(10):
+                next_word = self.markov_chain[seed_word]
+                # probable_tail = next(iter(next_word))
+                tails = list(next_word.keys())
+                tail_weights = list(next_word.values())
+                probable_tail = random.choices(tails, tail_weights)[0]
+                sentence += f'{probable_tail} '
+                seed_word = probable_tail
+            print(sentence.strip())
 
     def get_token(self):
         while True:
@@ -103,7 +122,8 @@ def text_generator():
     # tg.get_token()
     # tg.print_bi_gram_stats()
     # tg.get_bi_gram()
-    tg.get_markov_chain()
+    # tg.get_markov_chain()
+    tg.print_predictive_sentences()
 
 
 if __name__ == '__main__':
