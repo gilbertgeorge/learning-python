@@ -12,6 +12,7 @@ class MySocket:
         else:
             self.port = port
         self.socket = socket.socket()
+        self.password = 'pass'
 
     def listen(self):
         print('listening')
@@ -29,6 +30,35 @@ class MySocket:
             print("from connected user: " + str(data))
             data = input('From listen -> ')
             conn.send(data.encode())  # send data to the client
+        conn.close()
+
+    def listen_for_password(self):
+        print(f'listening for password {self.password}')
+        address = (self.host, self.port)
+        self.socket.bind(address)
+        self.socket.listen(2)
+        conn, address = self.socket.accept()  # accept new connection
+        print("Connection from: " + str(address))
+        attempts = 0
+        while True:
+            # receive data stream. it won't accept data packet greater than 1024 bytes
+            data = conn.recv(1024).decode()
+            if not data:
+                # if data is not received break
+                break
+            print("from connected user: " + str(data))
+            # data = input('From listen -> ')
+            if attempts > 1000000:
+                server_message = 'Too many attempts'
+                conn.send(server_message.encode())
+                break
+            if data == self.password:
+                server_message = 'Connection success!'
+                conn.send(server_message.encode())
+            elif data != self.password:
+                server_message = f'{data} - Wrong password!'
+                conn.send(server_message.encode())
+            attempts += 1
         conn.close()
 
     def send(self):
@@ -77,14 +107,15 @@ def sockets():
 
 
 def use_sockets():
-    mode = input('"send"/"receive": ')
+    mode = input('Mode (R)eceive / (s)end: ').lower()
 
-    if mode == 'send':
+    if mode == 'send' or mode == 's':
         sender = MySocket(socket.gethostname(), 3022)
         sender.send()
-    elif mode == 'receive':
+    elif mode == 'receive' or mode == 'r' or mode == '':
         receiver = MySocket(socket.gethostname(), 3022)
-        receiver.listen()
+        # receiver.listen()
+        receiver.listen_for_password()
 
 
 if __name__ == '__main__':
