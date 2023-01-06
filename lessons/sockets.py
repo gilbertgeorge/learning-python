@@ -12,7 +12,7 @@ class MySocket:
         else:
             self.port = port
         self.socket = socket.socket()
-        self.password = 'pass'
+        self.password = 'mIcHaEl'
 
     def listen(self):
         print('listening')

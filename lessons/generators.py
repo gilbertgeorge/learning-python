@@ -172,6 +172,27 @@ def brute_force_pass(prod):
         yield result
 
 
+def generate_caps_iterator(word):
+    letter_iterators = []
+    for letter_index in range(len(word)):
+        letter_iterator = (word[letter_index].lower(), word[letter_index].upper())
+        letter_iterators.append(letter_iterator)
+    word_variations = 0
+    for value in itertools.product(*letter_iterators):
+        word_variations += 1
+        print(''.join(value))
+    print(f'variations: {word_variations}')
+
+
+def dictionary_attack():
+    pw_list = ['1234567', 'dragon', '123123', 'baseball']
+    for pw in pw_list:
+        print(pw)
+        if any(c.isalpha() for c in pw):
+            print(f'{pw} contains chars')
+            generate_caps_iterator(pw)
+
+
 if __name__ == '__main__':
     # generators()
     # testing()
@@ -192,14 +213,15 @@ if __name__ == '__main__':
 
     # dining_combinations()
 
-    lowers = string.ascii_lowercase
-    numbers = string.digits
-    # lowers = ['a', 'b', 'c']
-    # numbers = ['1', '2', '3']
-    valid_chars = list(itertools.chain(lowers, numbers))
+    # lowers = string.ascii_lowercase
+    # numbers = string.digits
+    # # lowers = ['a', 'b', 'c']
+    # # numbers = ['1', '2', '3']
+    # valid_chars = list(itertools.chain(lowers, numbers))
+    #
+    # for pw_len in range(1, 10):
+    #     prod = itertools.product(valid_chars, repeat=pw_len)
+    #     for thing in prod:
+    #         print(''.join(thing))
 
-    for pw_len in range(1, 10):
-        prod = itertools.product(valid_chars, repeat=pw_len)
-        for thing in prod:
-            print(''.join(thing))
-
+    dictionary_attack()
