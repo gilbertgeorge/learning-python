@@ -12,9 +12,15 @@ class FlashCardDeck:
     def load_flashcards(self, number_of_cards):
         for card_index in range(1, number_of_cards + 1):
             print(f'The term for card #{card_index}:')
-            front = input()
+            while True:
+                front = input()
+                if self.validate_front_exists(front) is False:
+                    break
             print(f'The definition for card #{card_index}:')
-            back = input()
+            while True:
+                back = input()
+                if self.validate_back_exists(back) is False:
+                    break
             self.load_flashcard(front, back)
 
     def print_random_card(self):
@@ -30,8 +36,28 @@ class FlashCardDeck:
             print('Correct!')
             return True
         else:
-            print(f'Wrong. The right answer is "{selected_card["back"]}"')
+            mismatched_cards = [card for card in self.flashcards if card['back'] == answer]
+            if len(mismatched_cards) > 0:
+                mismatched_card = mismatched_cards[0]
+                print(f'Wrong. The right answer is "{selected_card["back"]}", '
+                      f'but your definition is correct for "{mismatched_card["front"]}".')
+            else:
+                print(f'Wrong. The right answer is "{selected_card["back"]}".')
             return False
+
+    def validate_front_exists(self, card_front):
+        for card in self.flashcards:
+            if card['front'] == card_front:
+                print(f'The term "{card_front}" already exists. Try again:')
+                return True
+        return False
+
+    def validate_back_exists(self, card_back):
+        for card in self.flashcards:
+            if card['back'] == card_back:
+                print(f'The definition "{card_back}" already exists. Try again:')
+                return True
+        return False
 
     def quiz_all_loaded_cards(self):
         for card in self.flashcards:
@@ -48,17 +74,6 @@ def flashcards():
     number_of_cards = int(input())
     deck.load_flashcards(number_of_cards)
     deck.quiz_all_loaded_cards()
-
-    # front = input()
-    # back = input()
-    # deck.load_flashcard(front, back)
-    # answer = input()
-    # deck.validate_card_answer(front, answer)
-
-    # deck.load_flashcard('What is the capital of France?', 'Paris')
-    # deck.load_flashcard('What is the capital of Germany?', 'Berlin')
-    # deck.load_flashcard('What is the capital of Spain?', 'Madrid')
-    # deck.print_random_card()
 
 
 if __name__ == '__main__':
