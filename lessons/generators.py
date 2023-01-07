@@ -193,6 +193,32 @@ def dictionary_attack():
             generate_caps_iterator(pw)
 
 
+def generator2():
+    for x in range(100):
+        yield x
+
+
+def generator3():
+    for y in range(100, 200):
+        yield y
+
+
+def generator():
+    for x in generator2():
+        yield x
+    for y in generator3():
+        yield y
+
+
+def generator_better():
+    yield from generator2()
+    yield from generator3()
+
+
+def from_names(name_list):
+    yield from list(name_list)
+
+
 if __name__ == '__main__':
     # generators()
     # testing()
@@ -224,4 +250,13 @@ if __name__ == '__main__':
     #     for thing in prod:
     #         print(''.join(thing))
 
-    dictionary_attack()
+    # dictionary_attack()
+
+    # print(list(generator()))
+    # print(list(generator_better()))
+
+    # names = input().split()
+    # print(*from_names(names), sep='\n')
+
+    message = input()
+    print(*from_names(message), sep='\n')
