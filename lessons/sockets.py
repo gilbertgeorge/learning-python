@@ -1,5 +1,7 @@
 import socket
 import json
+import time
+
 
 class MySocket:
     def __init__(self, host=None, port=None, username=None, password=None):
@@ -20,6 +22,7 @@ class MySocket:
         else:
             self.password = password
         self.socket = socket.socket()
+        self.delay = 0.1
 
     def listen(self):
         print('listening')
@@ -49,7 +52,7 @@ class MySocket:
         to_send = {"result": result}
         return json.dumps(to_send)
 
-    def listen_for_password(self):
+    def listen_for_login_password(self, with_delay=False):
         print(f'listening for login:{self.username} password:{self.password}')
         address = (self.host, self.port)
         self.socket.bind(address)
@@ -75,7 +78,11 @@ class MySocket:
                 server_message = 'Wrong login!'
                 conn.send(self.get_send_result(server_message).encode())
             elif self.password.startswith(password) and password != self.password and password != '':
-                server_message = 'Exception happened during login'
+                if with_delay:
+                    server_message = 'Wrong password!'
+                    time.sleep(self.delay)
+                else:
+                    server_message = 'Exception happened during login'
                 conn.send(self.get_send_result(server_message).encode())
             elif login == self.username and password != self.password:
                 server_message = 'Wrong password!'
@@ -83,6 +90,35 @@ class MySocket:
             elif login == self.username and password == self.password:
                 server_message = 'Connection success!'
                 conn.send(self.get_send_result(server_message).encode())
+            attempts += 1
+        conn.close()
+
+    def listen_for_password(self):
+        print(f'listening for password {self.password}')
+        address = (self.host, self.port)
+        self.socket.bind(address)
+        self.socket.listen(2)
+        conn, address = self.socket.accept()  # accept new connection
+        print("Connection from: " + str(address))
+        attempts = 0
+        while True:
+            # receive data stream. it won't accept data packet greater than 1024 bytes
+            data = conn.recv(1024).decode()
+            if not data:
+                # if data is not received break
+                break
+            print("from connected user: " + str(data))
+            # data = input('From listen -> ')
+            if attempts > 1000000:
+                server_message = 'Too many attempts'
+                conn.send(server_message.encode())
+                break
+            if data == self.password:
+                server_message = 'Connection success!'
+                conn.send(server_message.encode())
+            elif data != self.password:
+                server_message = f'{data} - Wrong password!'
+                conn.send(server_message.encode())
             attempts += 1
         conn.close()
 
@@ -140,7 +176,9 @@ def use_sockets():
     elif mode == 'receive' or mode == 'r' or mode == '':
         receiver = MySocket(socket.gethostname(), 3022)
         # receiver.listen()
-        receiver.listen_for_password()
+        # receiver.listen_for_password()
+        # receiver.listen_for_login_password()
+        receiver.listen_for_login_password(with_delay=True)
 
 
 if __name__ == '__main__':
