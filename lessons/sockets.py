@@ -1,8 +1,8 @@
 import socket
-
+import json
 
 class MySocket:
-    def __init__(self, host=None, port=None):
+    def __init__(self, host=None, port=None, username=None, password=None):
         if host is None:
             self.host = '127.0.0.1'
         else:
@@ -11,8 +11,15 @@ class MySocket:
             self.port = 3030
         else:
             self.port = port
+        if username is None:
+            self.username = 'useruser'
+        else:
+            self.username = username
+        if password is None:
+            self.password = 'password'
+        else:
+            self.password = password
         self.socket = socket.socket()
-        self.password = 'mIcHaEl'
 
     def listen(self):
         print('listening')
@@ -32,8 +39,18 @@ class MySocket:
             conn.send(data.encode())  # send data to the client
         conn.close()
 
+    def get_creds_from_string(self, string):
+        credentials = json.loads(string)
+        login = credentials['login']
+        password = credentials['password']
+        return login, password
+
+    def get_send_result(self, result):
+        to_send = {"result": result}
+        return json.dumps(to_send)
+
     def listen_for_password(self):
-        print(f'listening for password {self.password}')
+        print(f'listening for login:{self.username} password:{self.password}')
         address = (self.host, self.port)
         self.socket.bind(address)
         self.socket.listen(2)
@@ -47,17 +64,25 @@ class MySocket:
                 # if data is not received break
                 break
             print("from connected user: " + str(data))
-            # data = input('From listen -> ')
+            login, password = self.get_creds_from_string(data)
+            print(f'login: {login}, password: {password}')
+
             if attempts > 1000000:
                 server_message = 'Too many attempts'
-                conn.send(server_message.encode())
+                conn.send(self.get_send_result(server_message).encode())
                 break
-            if data == self.password:
+            if login != self.username:
+                server_message = 'Wrong login!'
+                conn.send(self.get_send_result(server_message).encode())
+            elif self.password.startswith(password) and password != self.password and password != '':
+                server_message = 'Exception happened during login'
+                conn.send(self.get_send_result(server_message).encode())
+            elif login == self.username and password != self.password:
+                server_message = 'Wrong password!'
+                conn.send(self.get_send_result(server_message).encode())
+            elif login == self.username and password == self.password:
                 server_message = 'Connection success!'
-                conn.send(server_message.encode())
-            elif data != self.password:
-                server_message = f'{data} - Wrong password!'
-                conn.send(server_message.encode())
+                conn.send(self.get_send_result(server_message).encode())
             attempts += 1
         conn.close()
 
