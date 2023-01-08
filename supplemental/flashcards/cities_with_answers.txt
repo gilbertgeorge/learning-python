@@ -1,0 +1,3 @@
+Russia:Moscow:0
+France:Paris:0
+Great Britain:London:1

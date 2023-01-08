@@ -1,0 +1,43 @@
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+hardest card
+There are no cards with errors.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+import
+File name:
+../supplemental/flashcards/cities.txt
+3 cards have been loaded.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+hardest card
+The hardest card is "France". You have 10 errors answering it.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+ask
+How many times to ask?
+1
+Print the definition of "Russia":
+Paris
+Wrong. The right answer is "Moscow", but your definition is correct for "France".
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+hardest card
+The hardest card is "France". You have 10 errors answering it.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+reset stats
+Card statistics have been reset.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+hardest card
+There are no cards with errors.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+log
+File name:
+../supplemental/flashcards/log1.txt
+The log has been saved.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+ask
+How many times to ask?
+1
+Print the definition of "Russia":
+Moscow
+Correct!
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+log
+File name:
+../supplemental/flashcards/log2.txt
