@@ -181,3 +181,9 @@ if __name__ == '__main__':
     check_pep_name('directoryName')
     check_pep_name('lower')
     check_pep_name('UPPER')
+
+    name = ['M', 'A', 'R', 'C', 'O']
+    print(*name, sep='')
+    print(*name, sep='-', end='!')
+    print()
+
