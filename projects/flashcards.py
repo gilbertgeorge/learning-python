@@ -1,11 +1,50 @@
 import io
 import random
+import argparse
 
 
 class FlashCardDeck:
-    def __init__(self):
+    def __init__(self, import_from=None, export_to=None):
         self.flashcards = []
         self.log = io.StringIO()
+        if import_from is not None:
+            self.import_from = import_from
+            self.auto_import_flashcards(self.import_from)
+        else:
+            self.import_from = None
+        if export_to is not None:
+            self.export_to = export_to
+        else:
+            self.export_to = None
+
+    def menu_prompt(self):
+        while True:
+            command_prompt = 'Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):'
+            self.print_and_log(command_prompt)
+            command = input()
+            self.write_log_entry(command)
+            if command == 'add':
+                self.input_flashcard()
+            elif command == 'remove':
+                self.remove_flashcard()
+            elif command == 'import':
+                self.import_flashcards()
+            elif command == 'export':
+                self.export_flashcards()
+            elif command == 'ask':
+                self.quiz_random_cards()
+            elif command == 'log':
+                self.export_log()
+            elif command == 'hardest card':
+                self.hardest_card()
+            elif command == 'reset stats':
+                self.reset_errors()
+            elif command == 'exit':
+                if self.export_to is not None:
+                    self.auto_export_flashcards(self.export_to)
+                print('Bye bye!')
+                break
+            print()
 
     def write_log_entry(self, entry):
         self.log.write(entry + '\n')
@@ -157,6 +196,15 @@ class FlashCardDeck:
         self.print_and_log('File name:')
         file_name = input()
         self.write_log_entry(file_name)
+        self.auto_import_flashcards(file_name)
+
+    def export_flashcards(self):
+        self.print_and_log('File name:')
+        file_name = input()
+        self.write_log_entry(file_name)
+        self.auto_export_flashcards(file_name)
+
+    def auto_import_flashcards(self, file_name):
         card_count = 0
         try:
             with open(file_name, 'r', encoding='utf-8') as file:
@@ -168,10 +216,7 @@ class FlashCardDeck:
         except FileNotFoundError:
             self.print_and_log('File not found.')
 
-    def export_flashcards(self):
-        self.print_and_log('File name:')
-        file_name = input()
-        self.write_log_entry(file_name)
+    def auto_export_flashcards(self, file_name):
         card_count = 0
         with open(file_name, 'w', encoding='utf-8') as file:
             for card in self.flashcards:
@@ -181,33 +226,17 @@ class FlashCardDeck:
 
 
 def flashcards():
-    deck = FlashCardDeck()
-    while True:
-        command_prompt = 'Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):'
-        print(command_prompt)
-        deck.log.write(command_prompt + '\n')
-        command = input()
-        deck.write_log_entry(command)
-        if command == 'add':
-            deck.input_flashcard()
-        elif command == 'remove':
-            deck.remove_flashcard()
-        elif command == 'import':
-            deck.import_flashcards()
-        elif command == 'export':
-            deck.export_flashcards()
-        elif command == 'ask':
-            deck.quiz_random_cards()
-        elif command == 'log':
-            deck.export_log()
-        elif command == 'hardest card':
-            deck.hardest_card()
-        elif command == 'reset stats':
-            deck.reset_errors()
-        elif command == 'exit':
-            print('Bye bye!')
-            break
-        print()
+    # --import_from=../supplemental/flashcards/cities.txt --export_to=../supplemental/flashcards/output.txt
+    parser = argparse.ArgumentParser(description="This program allows you to create"
+                                                 " flashcards and test yourself on them.")
+    parser.add_argument("--import_from", default=None,
+                        help="Define file to automatically import from upon start.")
+    parser.add_argument("--export_to", default=None,
+                        help="Define file to automatically export to upon exit.")
+    args = parser.parse_args()
+
+    deck = FlashCardDeck(args.import_from, args.export_to)
+    deck.menu_prompt()
 
 
 if __name__ == '__main__':
