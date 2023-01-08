@@ -139,6 +139,24 @@ def find_years():
     return years
 
 
+def check_name(x):
+    if x.isalpha() and x[0].isupper() and x[1:].islower():
+        print("The name is", x)
+    else:
+        print(x, "is not a name!")
+
+
+def check_pep_name(name):
+    if name in ('l', 'I', 'O'):
+        print("Never use the characters 'l', 'O', or 'I' as single-character variable names")
+    elif name[0:].islower():
+        print("It is a common variable")
+    elif name[0:].isupper():
+        print("It is a constant")
+    else:
+        print("You shouldn't use mixedCase")
+
+
 def hours_of_work():
     hours = int(input())
     if hours < 2:
@@ -157,4 +175,9 @@ if __name__ == '__main__':
     # parser.add_argument("-n", "--number")
     # print(f'parser: {parser}; arguments: {parser.parse_args()}')
 
-    hours_of_work()
+    # hours_of_work()
+    check_pep_name('l')
+    check_pep_name('I')
+    check_pep_name('directoryName')
+    check_pep_name('lower')
+    check_pep_name('UPPER')
