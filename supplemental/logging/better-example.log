@@ -1,0 +1,10 @@
+2023-01-08 12:00:02,757 | DEBUG: Here you have some information for debugging.
+2023-01-08 12:00:02,758 | INFO: Everything is OK. Keep going!
+2023-01-08 12:00:02,758 | WARNING: Something strange has happened, but it's not critical.
+2023-01-08 12:00:02,758 | ERROR: Something unexpected and critical has happened.
+2023-01-08 12:00:02,758 | CRITICAL: A critical error! The code cannot run!
+2023-01-08 12:00:13,032 | DEBUG: Here you have some information for debugging.
+2023-01-08 12:00:13,032 | INFO: Everything is OK. Keep going!
+2023-01-08 12:00:13,032 | WARNING: Something strange has happened, but it's not critical.
+2023-01-08 12:00:13,032 | ERROR: Something unexpected and critical has happened.
+2023-01-08 12:00:13,032 | CRITICAL: A critical error! The code cannot run!

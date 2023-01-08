@@ -1,0 +1,6 @@
+DEBUG:This message should go to the log file
+INFO:So should this
+WARNING:And this, too
+DEBUG:This message should go to the log file
+INFO:So should this
+WARNING:And this, too
