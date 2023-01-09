@@ -1,6 +1,7 @@
 import os.path
 import re
 import argparse
+import string
 
 
 class CodeAnalyzer:
@@ -38,6 +39,43 @@ class CodeAnalyzer:
                 self.analyze_inline_comments(file, line_number, line_text)
                 self.analyze_todo_comments(file, line_number, line_text)
                 self.analyze_blank_preceding_lines(file, line_number, line_text)
+                self.analyze_spaces_after_class_or_function_definition(file, line_number, line_text)
+                self.analyze_class_name_camel_case(file, line_number, line_text)
+                self.analyze_function_name_snake_case(file, line_number, line_text)
+
+    def analyze_spaces_after_class_or_function_definition(self, file, line_number, line_text):
+        template = r'[\s]*(def*|class*)(\s+)(\w+)'
+        some_match = re.match(template, line_text)
+        if some_match is not None:
+            type_name = some_match.group(1)
+            space = some_match.group(2)
+            id_name = some_match.group(3)
+            if len(space) > 1:
+                print(f"{file}: Line {line_number}: S007 Too many spaces after '{type_name}'")
+
+    def analyze_class_name_camel_case(self, file, line_number, line_text):
+        class_index = line_text.find('class')
+        if class_index != -1:
+            template = r'\A[\s]*class(\s+)(\w+):'
+            class_match = re.match(template, line_text)
+            if class_match is not None:
+                space = class_match.group(1)
+                class_name = class_match.group(2)
+                if class_name[0] not in string.ascii_uppercase or '-' in class_name:
+                    print(f"{file}: Line {line_number}: S008 Class name '{class_name}' should use CamelCase")
+
+    def analyze_function_name_snake_case(self, file, line_number, line_text):
+        def_index = line_text.find('def')
+        if def_index != -1:
+            template = r'\A[\s]*def(\s+)(\w*)[(]'
+            fn_match = re.match(template, line_text)
+            if fn_match is not None:
+                space = fn_match.group(1)
+                function_name = fn_match.group(2)
+                for letter in function_name:
+                    if letter in string.ascii_uppercase:
+                        print(f"{file}: Line {line_number}: S009 Function name '{function_name}' should use snake_case")
+                        break
 
     def analyze_line_length(self, file, line_number, line_text):
         if len(line_text) > 79:
