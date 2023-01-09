@@ -54,8 +54,36 @@ def parse_ast_args(file_name):
     print(args2)
 
 
+def parse_ast_tree_walk(file_name):
+    with open(file_name, 'r', encoding='utf-8') as file:
+        contents = file.read()
+        tree = ast.parse(contents)
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef):
+            function_name = node.name
+            print(f'Function name: {function_name}')
+            # check whether the function's name is written in camel_case
+            for fn_node in ast.walk(node):
+                if isinstance(fn_node, ast.Assign):
+                    target_name = fn_node.targets[0].id
+                    print(f'FN Assign name: {target_name}')
+        if isinstance(node, ast.ClassDef):
+            class_name = node.name
+            print(f'Class name: {class_name}')
+        if isinstance(node, ast.Assign):
+            target_name = node.targets[0].id
+            print(f'Assign name: {target_name}')
+
+
+
 if __name__ == '__main__':
     # the_ast()
     # parse_ast('assert.py')
     # eval_input()
-    parse_ast_args('assert.py')
+    # parse_ast_args('assert.py')
+
+    # parse_ast_tree_walk('assert.py')
+    # parse_ast_tree_walk('classes.py')
+
+    parse_ast_tree_walk('../supplemental/code-analyzer/test4.py')
