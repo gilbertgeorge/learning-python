@@ -167,7 +167,13 @@ def hours_of_work():
         print("Don't forget to take breaks!")
 
 
+def math_e():
+    x = int(input())
+    print(math.expm1(x)-1)
+
+
 if __name__ == '__main__':
+    math_e()
     # print(find_years())
 
     # argument parsing

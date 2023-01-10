@@ -139,11 +139,17 @@ def fruit_test():
     print(fruit_dictionary.setdefault("apple", "red"))
 
 
-def mississippi():
-    pass
+def rgb(color_name):
+    colors = dict()
+    colors['Purple'] = {"R": 160, "G": 32, "B": 255}
+    colors['Light Blue'] = {"R": 80, "G": 208, "B": 255}
+    colors['Yellow'] = {"R": 255, "G": 224, "B": 32}
+    selected_color = colors[color_name]
+    print(f'({selected_color["R"]}, {selected_color["G"]}, {selected_color["B"]})')
 
 
 if __name__ == '__main__':
+    # rgb('Purple')
     # dictionary()
     # sets()
     # fromkeys()
