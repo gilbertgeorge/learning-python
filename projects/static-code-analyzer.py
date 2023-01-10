@@ -37,6 +37,10 @@ class CodeAnalyzer:
         for warning in sorted_list:
             print(warning['warning'])
 
+    def add_warning(self, file, line_number, warning):
+        warning_to_add = {'file': file, 'line_number': line_number, 'warning': warning}
+        self.warnings.append(warning_to_add)
+
     def analyze(self):
         for file in self.code_lines.keys():
             tree = ast.parse(self.code_lines[file]['code'])
@@ -175,10 +179,6 @@ class CodeAnalyzer:
         for line in mutables:
             warn = f"{file}: Line {line}: S012 Default argument value is mutable"
             self.add_warning(file, line, warn)
-
-    def add_warning(self, file, line_number, warning):
-        warning_to_add = {'file': file, 'line_number': line_number, 'warning': warning}
-        self.warnings.append(warning_to_add)
 
 
 def analyzer():
