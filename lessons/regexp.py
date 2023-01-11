@@ -254,7 +254,7 @@ def quantifiers():
 
 
 def the_group():
-    print('**** Grouping ****')
+    print('******** Grouping ********')
     template = "b.d"  # matches a string starting with "b", ending with "d" and any character in between
     match_1 = re.match(template, "bad").group()  # the result is a string "bad"
     match_2 = re.match(template, "bed").group()  # the result is a string "bed"
@@ -269,7 +269,7 @@ def the_group():
 
 
 def match_index():
-    print('**** Indexing ****')
+    print('******** Indexing ********')
     # start is the index of the first character of the match
     template = "b.d"
     start = re.match(template, "bad").start()
@@ -291,7 +291,8 @@ def match_index():
 
 
 def function_flags():
-    print('**** Function flags ****')
+    print('******** Function flags ********')
+    # case ignore flag
     lower = r'where is the money, Lebowski\?'
     upper = r'WHERE IS THE MONEY, Lebowski\?'
     string = 'Where Is the money, lebowski?'
@@ -299,6 +300,7 @@ def function_flags():
     result_upper = re.match(upper, string, flags=re.IGNORECASE)  # match
     print(result_lower, result_upper)
 
+    # change . meta-character behavior
     dot_template = 'new line .'
     no_flag = re.match(dot_template, 'new line \n')  # None
     with_flag = re.match(dot_template, 'new line \n', flags=re.DOTALL)  # match
@@ -307,9 +309,43 @@ def function_flags():
     result = re.match('FLAG ME.', 'flag me\n', flags=re.IGNORECASE + re.DOTALL)  # match
     print(result)
 
+    # change ^ and $ meta-characters behavior
+    string = '''A million dollars isn’t cool.\nYou know what’s cool?\nA billion dollars.'''
+    result_1 = re.findall('^(A|You)', string)  # ['A']
+    print(result_1)
+    result_2 = re.findall('^(A|You)', string, flags=re.MULTILINE)  # ['A', 'You', 'A']
+    print(result_2)
+    result_3 = re.findall('(cool.)$', string)  # []
+    print(result_3)
+    result_4 = re.findall('(cool.)$', string, flags=re.MULTILINE)  # ['cool.', 'cool?']
+    print(result_4)
+
+    # verbose flag
+    pattern = re.compile(r"""
+                          ^([a-z0-9_\.-]+)               # username
+                           @                             # @ sign
+                          ([0-9a-z\.-]+)                 # host name
+                           \.                            # a dot .
+                          ([a-z]{2,6})$                  # top level domain     
+                          """, flags=re.VERBOSE)
+
+    results = pattern.match('username@abc.com')  # match
+    print(results.group())
+
+    # ascii flag
+    result_1 = re.findall('\w', 'ä, Ä, ö. Ö, ü, Ü, ß.')
+    result_2 = re.findall('\w', 'ä, Ä, ö. Ö, ü, Ü, ß.', flags=re.ASCII)
+    print(result_1)  # ['ä', 'Ä', 'ö', 'Ö', 'ü', 'Ü', 'ß']
+    print(result_2)  # []
+
+    # multiple flags, use | or + to combine them
+    string = "A million dollars isn’t cool.\nYou know what’s cool?\nA billion dollars."
+    result = re.findall('^(a|you)', string, flags=re.IGNORECASE | re.MULTILINE)
+    print(result)
+
 
 def search():
-    print('**** Search ****')
+    print('******** Search ********')
 
     string = "roads? where we're going we don't need roads."
     result_1 = re.match('roads\?', string)  # match
@@ -325,7 +361,7 @@ def search():
 
 
 def find_all():
-    print('**** Find All ****')
+    print('******** Find All ********')
     string = "A million dollars isn’t cool. You know what’s cool? Not a billion dollars; a gazillion dollars."
     result_1 = re.findall(r'\b[\w]*illion', string)  # ['million', 'billion']
     result_2 = re.findall('thousand', string)  # []
@@ -342,7 +378,7 @@ def find_all():
 
 
 def splitting():
-    print('**** Splitting ****')
+    print('******** Splitting ********')
 
     string = '111412222234333345555544'
     results_1 = re.split('4', string)
@@ -368,7 +404,7 @@ def splitting():
 
 
 def search_and_replace():
-    print('**** Search and Replace ****')
+    print('******** Search and Replace ********')
     string = 'blue jeans, white shirt, yellow socks'
     pattern = '(blue|white|yellow)'
     replacement = 'black'
@@ -379,7 +415,7 @@ def search_and_replace():
 
 
 def pre_compiling():
-    print('**** Compile ****')
+    print('******** Compile ********')
     string = "roads? where we're going we don't need roads."
 
     # define a pattern in a string format
