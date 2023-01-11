@@ -34,18 +34,28 @@ class SmartCalculator:
             if any(char.isdigit() for char in self.current_expression):
                 print('Invalid identifier')
             elif self.current_expression in self.variables.keys():
-                print(self.variables[self.current_expression])
+                local = self.propagate_variables()
+                print(local[self.current_expression])
             else:
                 print('Unknown variable')
+        elif '//' in self.current_expression:
+            print('Invalid expression')
         else:
             try:
-                local = self.variables.copy()
-                print(eval(self.current_expression, local))
+                local = self.propagate_variables()
+                print(int(eval(self.current_expression, local)))
                 del local
             except NameError:
                 print(f'Invalid identifier')
             except SyntaxError:
                 print(f'Invalid expression')
+
+    def propagate_variables(self):
+        local = self.variables.copy()
+        for key, value in local.items():
+            if isinstance(value, str):
+                local[key] = local[value]
+        return local
 
     def user_prompt(self):
         while True:
@@ -60,7 +70,7 @@ class SmartCalculator:
             elif user_input[0] == '/':
                 print('Unknown command')
             else:
-                self.current_expression = user_input
+                self.current_expression = user_input.strip()
                 self.evaluate_expression()
 
 
