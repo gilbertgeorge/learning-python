@@ -253,7 +253,174 @@ def quantifiers():
     print(re.match(template, "i need no syyyympathy"))  # no match: 4 'y'
 
 
+def the_group():
+    print('**** Grouping ****')
+    template = "b.d"  # matches a string starting with "b", ending with "d" and any character in between
+    match_1 = re.match(template, "bad").group()  # the result is a string "bad"
+    match_2 = re.match(template, "bed").group()  # the result is a string "bed"
+    print(match_1)
+    print(match_2)
+
+    template2 = r'(\w*)[\s:-](\w*)'
+    match_3 = re.match(template2, "John:Smith")
+    print(match_3.group())  # the result is a string "John:Smith"
+    print(match_3.group(1))  # the result is a string "John"
+    print(match_3.group(2))  # the result is a string "Smith"
+
+
+def match_index():
+    print('**** Indexing ****')
+    # start is the index of the first character of the match
+    template = "b.d"
+    start = re.match(template, "bad").start()
+    print(start)  # the result is 0
+
+    # end is index of the last character + 1
+    template = "100%?"  # matches strings "100" or "100%"
+    end_1 = re.match(template, "100").end()  # the result is integer 3
+    end_2 = re.match(template, "100%").end()  # the result is integer 4
+    print(end_1, end_2)
+
+    template = "100%?"
+    string = "100% reason to remember the name"
+    end = re.match(template, string).end()
+    print(string[end:])
+
+    span = re.match(template, "100%").span()
+    print(span)  # the result is tuple (0, 4)
+
+
+def function_flags():
+    print('**** Function flags ****')
+    lower = r'where is the money, Lebowski\?'
+    upper = r'WHERE IS THE MONEY, Lebowski\?'
+    string = 'Where Is the money, lebowski?'
+    result_lower = re.match(lower, string, flags=re.IGNORECASE)  # match
+    result_upper = re.match(upper, string, flags=re.IGNORECASE)  # match
+    print(result_lower, result_upper)
+
+    dot_template = 'new line .'
+    no_flag = re.match(dot_template, 'new line \n')  # None
+    with_flag = re.match(dot_template, 'new line \n', flags=re.DOTALL)  # match
+    print(no_flag, with_flag)
+
+    result = re.match('FLAG ME.', 'flag me\n', flags=re.IGNORECASE + re.DOTALL)  # match
+    print(result)
+
+
+def search():
+    print('**** Search ****')
+
+    string = "roads? where we're going we don't need roads."
+    result_1 = re.match('roads\?', string)  # match
+    result_2 = re.match('roads\.', string)  # no match
+    print(result_1, result_2)
+
+    string = "roads? where we're going we don't need roads."
+    result_1 = re.search('roads\?', string)  # match
+    result_2 = re.search('roads\.', string)  # match
+    result_3 = re.search('Roads', string)  # no match
+    result_4 = re.search('here', string)  # match
+    print(result_1, result_2, result_3, result_4)
+
+
+def find_all():
+    print('**** Find All ****')
+    string = "A million dollars isn’t cool. You know what’s cool? Not a billion dollars; a gazillion dollars."
+    result_1 = re.findall(r'\b[\w]*illion', string)  # ['million', 'billion']
+    result_2 = re.findall('thousand', string)  # []
+    print(result_1, result_2)
+
+    string = '3 apples, 2 bananas, 5 pears, 10 strawberries'
+    results = re.findall('(\d+) (\w+)', string)
+    print(results)  # [('3', 'apples'), ('2', 'bananas'), ('5', 'pears'), ('10', 'strawberries')]
+
+    # single capture group
+    string = '3 apples, 2 bananas, 5 pears, 10 strawberries'
+    results = re.findall('(\d+) \w+', string)
+    print(results)  # ['3', '2', '5', '10']
+
+
+def splitting():
+    print('**** Splitting ****')
+
+    string = '111412222234333345555544'
+    results_1 = re.split('4', string)
+    print(results_1)  # ['111', '1222223', '3333', '55555', '', '']
+
+    string = '111412222234333345555544'
+    results_2 = re.split('4', string, maxsplit=3)
+    print(results_2)  # ['111', '1222223', '3333', '5555544']
+
+    string = "Roads? Where we're going we don't need roads."
+    result_1 = re.split('\W+', string)
+    print(result_1)  # ['Roads', 'Where', 'we', 're', 'going', 'we', 'don', 't', 'need', 'roads', '']
+    result_2 = re.split('(\W+)', string)
+    print(result_2)  # ['Roads', '? ', 'Where', ' ', 'we', "'", 're', ' ', 'going', ' ', 'we', ' ', ...
+
+    string = '3 apples, 2 bananas, 5 pears, 10 strawberries'
+    result_3 = re.split('\d (\w+)', string)
+    result_4 = re.split('(\d+) (\w+)', string)
+    result_5 = re.findall('(\d+) (\w+)', string)
+    print(result_3)
+    print(result_4)  # ['', '3', 'apples', ', ', '2', 'bananas', ', ', '5', 'pears', ', ', '10', 'strawberries']
+    print(result_5)
+
+
+def search_and_replace():
+    print('**** Search and Replace ****')
+    string = 'blue jeans, white shirt, yellow socks'
+    pattern = '(blue|white|yellow)'
+    replacement = 'black'
+    result_1 = re.sub(pattern, replacement, string)  # 'black jeans, black shirt, black socks'
+    print(result_1)
+    result_2 = re.sub(pattern, replacement, string, count=2)  # 'black jeans, black shirt, yellow socks'
+    print(result_2)
+
+
+def pre_compiling():
+    print('**** Compile ****')
+    string = "roads? where we're going we don't need roads."
+
+    # define a pattern in a string format
+    string_pattern = 'roads'
+
+    # pass the pattern to the re.compile() method
+    my_pattern = re.compile(string_pattern)
+
+    # use the returned Pattern object to match a pattern
+    result_1 = my_pattern.match(string)  # <re.Match object; span=(0, 5), match='roads'>
+    print(result_1)
+    result_2 = my_pattern.findall(string)  # ['roads', 'roads']
+    print(result_2)
+    result_3 = my_pattern.split(string)  # ['', "? where we're going we don't need ", '.']
+    print(result_3)
+    result_4 = my_pattern.sub('cars', string)  # 'cars? where we're going we don't need cars.'
+    print(result_4)
+
+
+def check_user_name(user_name):
+    pattern = r'^[a-zA-Z].*$'
+    result = re.match(pattern, user_name)
+    if result:
+        print('Thank you!')
+    else:
+        print('Oops! The username has to start with a letter.')
+
+
 if __name__ == '__main__':
+    the_group()
+    match_index()
+    function_flags()
+    search()
+    find_all()
+    splitting()
+    search_and_replace()
+    pre_compiling()
+
+    # check_user_name('1abc')
+    # check_user_name('abc')
+
     # examples1()
     # examples2()
     # test1()
@@ -278,5 +445,5 @@ if __name__ == '__main__':
 
     # quantifiers()
 
-    print(mr_smith('Will Smith'))
+    # print(mr_smith('Will Smith'))
 
