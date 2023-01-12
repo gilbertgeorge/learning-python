@@ -435,6 +435,35 @@ def pre_compiling():
     print(result_4)
 
 
+def look_around():
+    print('******** Look Around ********')
+    # positive look ahead
+    pattern = r'JetBrains (?=Academy)'
+    string_1 = 'JetBrains Academy'
+    string_2 = 'JetBrains Company'
+    result_1 = re.match(pattern, string_1)  # match
+    result_2 = re.match(pattern, string_2)  # no match
+    print(result_1)
+    print(result_2)
+
+    # negative look ahead
+    pattern = r'JetBrains (?!Academy)'
+    string_1 = 'JetBrains Academy'
+    string_2 = 'JetBrains Company'
+    result_1 = re.match(pattern, string_1)  # no match
+    result_2 = re.match(pattern, string_2)  # match
+    print(result_1)
+    print(result_2)
+
+    # positive look behind
+    pattern = '(?<=JetBrains )Academy'
+    string = 'JetBrains Academy'
+    result = re.search(pattern, string)
+    print(result.group())  # Academy
+
+    # negative look behind
+
+
 def check_user_name(user_name):
     pattern = r'^[a-zA-Z].*$'
     result = re.match(pattern, user_name)
@@ -453,6 +482,8 @@ if __name__ == '__main__':
     splitting()
     search_and_replace()
     pre_compiling()
+
+    look_around()
 
     # check_user_name('1abc')
     # check_user_name('abc')
