@@ -38,7 +38,7 @@ class SmartCalculator:
                 print(local[self.current_expression])
             else:
                 print('Unknown variable')
-        elif '//' in self.current_expression:
+        elif '//' in self.current_expression:  # based on unit tests; would work better without?
             print('Invalid expression')
         else:
             try:
@@ -63,8 +63,13 @@ class SmartCalculator:
             if user_input == '/exit':
                 print('Bye!')
                 break
+            elif user_input == '/list':
+                for key, value in self.variables.items():
+                    print(f'{key} = {value}')
             elif user_input == '/help':
                 print('The program performs math operations of numbers and can store variables')
+                print('The program supports the following operations: +, -, *, /, **')
+                print('The program supports the following commands: /exit, /list, /help')
             elif user_input == '':
                 continue
             elif user_input[0] == '/':
