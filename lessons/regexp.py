@@ -646,6 +646,65 @@ def check_user_name(user_name):
         print('Oops! The username has to start with a letter.')
 
 
+def find_emails(string):
+    print('******** Find Emails ********')
+    # Here we compile our simple pattern that will match email addresses
+    pattern = re.compile(r'[\w\.-]{5,}@[\w-]+\.[\w]{2,4}')
+
+    # Remember that re.findall() returns a list of all matched email strings
+    # emails = re.findall(pattern, string)
+    emails = pattern.findall(string)
+
+    # To print the matched strings one by one
+    for email in emails:
+        print(email)
+
+
+def tokenize(string):
+    print('******** Tokenize ********')
+    # consider nltk first
+    # Let's create a pattern that contains punctuation marks
+    punctuation = re.compile(r'[\.,\?!\*:;()]')
+
+    # Substitute the punctuations with empty strings
+    no_punct = re.sub(punctuation, '', string)
+    # print(no_punct)
+    # This is a sample string And here's another one
+
+    # Split sentences by whitespaces
+    tokens = re.split('\s+', no_punct)
+    return tokens
+
+
+def americanize(string):
+    template = r'(ou)'
+    sub = re.sub(template, 'o', string)
+    print(sub)
+
+
+def from_email(string):
+    print('******** From Email ********')
+    template = r'(From: )[\s]*([\w]+@ucsc.cl)[\s]*'
+    result = re.search(template, string)
+    if result:
+        print(result.groups())
+        print(result.group(2))
+        return True
+    else:
+        return False
+
+
+def find_the_caps(string):
+    print('******** Find the Caps ********')
+    template_caps = r'([A-Z][\w]+)'
+    caps = re.findall(template_caps, string)
+    template_digits = r'(\d+)'
+    digits = re.findall(template_digits, string)
+
+    print(f'Capitalized words: {", ".join(caps)}')
+    print(f'Digits: {", ".join(digits)}')
+
+
 if __name__ == '__main__':
     # at_name()
     # hyphen_name()
@@ -668,6 +727,15 @@ if __name__ == '__main__':
 
     de_name()
     template_error()
+    find_emails('''_@._ mary_liu@abc._ billy123@something.com, dog 456 
+            alice_2000@website.com johnnY.b@blahblahblah.com one@one.one''')
+    print(tokenize('''This is a sample string. And here's another one!'''))
+    americanize('I love this colour!')
+    print(from_email('From: admission@ucsc.cl        '))
+    print(from_email('From: admission@ucsS.cl        '))
+
+    find_the_caps('Albert Einstein was born in 1879. His IQ has been estimated to be between 160 and A 180.')
+
     # check_user_name('1abc')
     # check_user_name('abc')
 
