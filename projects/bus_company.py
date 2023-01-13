@@ -30,7 +30,9 @@ class BusCompany:
         # self.print_stop_summary()
         # if self.validate_bus_lines():
         #     self.print_bus_line_summary()
-        if self.validate_bus_times():
+        # if self.validate_bus_times():
+        #     print('OK')
+        if self.validate_bus_types():
             print('OK')
 
     def all_data_validations(self, bus_entry):
@@ -128,6 +130,12 @@ class BusCompany:
                     break
         return validation
 
+    def validate_bus_types(self):
+        validation = True
+        print('On demand stops test:')
+        print(self.bus_line)
+        return validation
+
     def add_bus_line_entry(self, bus_entry):
         bus_id = bus_entry['bus_id']
         stop_id = bus_entry['stop_id']
@@ -142,21 +150,25 @@ class BusCompany:
             self.stop_summary[bus_id] += 1
 
         if bus_id not in self.bus_line:
-            bus_stop = {'start': set(), 'interim': set(), 'finish': set()}
+            bus_stop = {'start': set(), 'interim': set(), 'demand': set(), 'finish': set()}
             if stop_type == 'S':
                 bus_stop['start'].add(stop_name)
-            elif stop_type == '' or stop_type == 'O':
-                bus_stop['interim'].add(stop_name)
+            elif stop_type == 'O':
+                bus_stop['demand'].add(stop_name)
             elif stop_type == 'F':
                 bus_stop['finish'].add(stop_name)
+            elif stop_type == '':
+                bus_stop['interim'].add(stop_name)
             self.bus_line[bus_id] = bus_stop
         else:
             if stop_type == 'S':
                 self.bus_line[bus_id]['start'].add(stop_name)
-            elif stop_type == '' or stop_type == 'O':
-                self.bus_line[bus_id]['interim'].add(stop_name)
+            elif stop_type == 'O':
+                self.bus_line[bus_id]['demand'].add(stop_name)
             elif stop_type == 'F':
                 self.bus_line[bus_id]['finish'].add(stop_name)
+            elif stop_type == '':
+                self.bus_line[bus_id]['interim'].add(stop_name)
 
         if bus_id not in self.bus_times:
             bus_stop_list = [{'stop': stop_name, 'time': a_time}]
@@ -187,10 +199,10 @@ class BusCompany:
         for bus_id, bus_stop in self.bus_line.items():
             start_list.add(*bus_stop["start"])
             finish_list.add(*bus_stop["finish"])
-            all_stops = bus_stop["start"].union(bus_stop["interim"]).union(bus_stop["finish"])
+            all_stops = bus_stop["start"].union(bus_stop["interim"]).union(bus_stop["demand"]).union(bus_stop["finish"])
             for other_id, other_stop in self.bus_line.items():
                 if bus_id != other_id:
-                    other_all_stops = other_stop["start"].union(other_stop["interim"]).union(other_stop["finish"])
+                    other_all_stops = other_stop["start"].union(other_stop["interim"]).union(other_stop["demand"]).union(other_stop["finish"])
                     if all_stops.intersection(other_all_stops):
                         transfer_list = transfer_list.union(all_stops.intersection(other_all_stops))
         print(f'Start stops: {len(start_list)} {sorted(list(start_list))}')
