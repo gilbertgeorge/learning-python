@@ -7,6 +7,7 @@ class BusCompany:
         self.bus_data = ''
         self.json_bus_data = {}
         self.bus_line = {}
+        self.bus_times = {}
         self.error_summary = {"bus_id": 0, "stop_id": 0, "stop_name": 0, "next_stop": 0, "stop_type": 0, "a_time": 0}
         self.stop_summary = {}
 
@@ -27,8 +28,10 @@ class BusCompany:
                 self.add_bus_line_entry(bus_entry)
         # self.print_error_summary()
         # self.print_stop_summary()
-        if self.validate_bus_lines():
-            self.print_bus_line_summary()
+        # if self.validate_bus_lines():
+        #     self.print_bus_line_summary()
+        if self.validate_bus_times():
+            print('OK')
 
     def all_data_validations(self, bus_entry):
         return self.validate_bus_ids(bus_entry) and self.validate_stop_ids(bus_entry) and \
@@ -111,6 +114,20 @@ class BusCompany:
                 return False
         return True
 
+    def validate_bus_times(self):
+        validation = True
+        print('Arrival time test:')
+        for bus_id, bus_stop in self.bus_times.items():
+            current_time = ''
+            for stop in bus_stop:
+                if current_time == '' or current_time < stop['time']:
+                    current_time = stop['time']
+                else:
+                    print(f'bus_id line: {bus_id}, wrong time on station {stop["stop"]}')
+                    validation = False
+                    break
+        return validation
+
     def add_bus_line_entry(self, bus_entry):
         bus_id = bus_entry['bus_id']
         stop_id = bus_entry['stop_id']
@@ -136,10 +153,17 @@ class BusCompany:
         else:
             if stop_type == 'S':
                 self.bus_line[bus_id]['start'].add(stop_name)
-            elif stop_type == '':
+            elif stop_type == '' or stop_type == 'O':
                 self.bus_line[bus_id]['interim'].add(stop_name)
             elif stop_type == 'F':
                 self.bus_line[bus_id]['finish'].add(stop_name)
+
+        if bus_id not in self.bus_times:
+            bus_stop_list = [{'stop': stop_name, 'time': a_time}]
+            self.bus_times[bus_id] = bus_stop_list
+        else:
+            bus_stop = {'stop': stop_name, 'time': a_time}
+            self.bus_times[bus_id].append(bus_stop)
 
     def print_error_summary(self):
         # print(self.json_bus_data)
