@@ -79,7 +79,7 @@ def double_escapes():
     re.match("\\\\", "\\")  # match
     # Python requires backslash to be escaped in the string as well
     # so the string consists of one literal backslash and one escape symbol
-    re.match("\\", "\\")  # SyntaxError
+    # re.match("\\", "\\")  # SyntaxError
 
 
 def escape_prefix():
@@ -461,7 +461,180 @@ def look_around():
     result = re.search(pattern, string)
     print(result.group())  # Academy
 
+    result_1 = re.match('(?<=JetBrains )Academy', 'JetBrains Academy')  # None
+    result_2 = re.search('(?<=JetBrains )Academy', 'JetBrains Academy')  # 'Academy'
+    print(result_1)
+    print(result_2)
+
     # negative look behind
+    pattern = r'(?<!JetBrains )Academy'
+    string_1 = 'JetBrains Academy'
+    string_2 = 'Hyperskill Academy'
+
+    re.search(pattern, string_1)  # None
+    re.search(pattern, string_2)  # Academy
+
+
+def groups_quantifiers_nesting():
+    print('******** Groups, Quantifiers, Nesting ********')
+    template = r"(h[ao]){2}"  # matches a string consisting of two "ha" or "ho"
+    result_1 = re.match(template, "haha")  # a match
+    result_2 = re.match(template, "hoha")  # a match
+    re.match(template, "haa")  # no match
+    re.match(template, "hho")  # no match
+    print(result_1)
+    print(result_2)
+
+    template = r"ha(\?!)?"  # we expect "?!" to occur together and in this exact order
+    r1 = re.match(template, "ha?!")  # a match
+    r2 = re.match(template, "ha")  # a match
+    # in case "?" or "!" occur separately, the group won't match them
+    r3 = re.match(template, "ha?")  # matches only "ha", but not "?", since there's no "!" succeeding "?"
+    r4 = re.match(template, "ha!")  # matches only "ha", but not "!", since there's no "?" preceding "!"
+    print(r1)
+    print(r2)
+    print(r3)
+    print(r4)
+
+    template = r"(([A-Z]\d){2}\.)+"
+    r1 = re.match(template, "A0C3.B8K5.")  # a match
+    r2 = re.match(template, "A0C3.")  # a match
+    r3 = re.match(template, "A0.C3B8K5")  # no match, as a dot separates two letter-digit combinations
+    r4 = re.match(template, "A0.C3.B8K5")  # no match, as "A0.C3." is separated by a dot and "B8K5" aren't followed by a dot
+    print(r1)
+    print(r2)
+    print(r3)
+    print(r4)
+
+
+def method_groups():
+    print('******** Method Groups ********')
+    template = r"([Pp]ython) (\d)"
+    match = re.match(template, "Python 3")
+    print(match.groups())  # The output is ('Python', '3')
+    print(match.group(1))  # The output is Python
+    print(match.group(2))  # The output is 3
+
+    template = r"([Pp]ython)( \d)?"
+    match = re.match(template, "Python")
+    print(match.groups())  # The output is ('Python', None)
+
+    template = r"Python (\d)"
+    match_1 = re.match(template, "Python 2")
+    print(match_1.group(1))  # The output is "2"
+    match_2 = re.match(template, "Python 3")
+    print(match_2.group(1))  # The output is "3"
+
+    template = r"Python (\d)"
+    match_1 = re.match(template, "Python 2")
+    print(match_1.group())  # The output is "Python 2"
+    print(match_1.group(0))  # The output is "Python 2"
+    print(match_1.group(1))  # The output is "2"
+
+    # open parenthesis in a group dictate the group's enumeration index (starting from 1)
+    template = r"((\w+) group) ((\w+) group)"
+    match = re.match(template, "first group second group")
+    r1 = match.group(1)  # "first group"
+    r2 = match.group(2)  # "first"
+    r3 = match.group(3)  # "second group"
+    r4 = match.group(4)  # "second"
+    print(r1)
+    print(r2)
+    print(r3)
+    print(r4)
+
+    # nested, repeated groups will only return the last match
+    template = r"(Python (\d) ){2,}"
+    r1 = re.match(template, "Python 2 Python 3 ").groups()
+    r2 = re.match(template, "Python 2 Python 3 ").group(2)  # The output is "3"
+    print(r1)
+    print(r2)
+
+
+def alterations():
+    print('******** Alterations ********')
+    template = r"python|java|kotlin"
+    re.match(template, "python")  # a match
+    re.match(template, "java")  # a match
+    re.match(template, "kotlin")  # a match
+    re.match(template, "c++")  # no match
+    re.match(template, "k")  # no match
+    re.match(template, "jav")  # no match
+
+    template = r"python|kotlin course|lesson"
+    r1 = re.match(template, "kotlin")  # no match: should be "kotlin course" to match
+    r2 = re.match(template, "python")  # a match, even though "python lesson" or "python course" were searched for
+    r3 = re.match(template, "lesson")  # a match, even though "kotlin lesson" or "python lesson" were searched for
+    print(r1)
+    print(r2)
+    print(r3)
+
+    template = "the good|bad|ugly"
+    r1 = re.match(template, "good")
+    r2 = re.match(template, "the good")
+    r3 = re.match(template, "the bad")
+    r4 = re.match(template, "bad")
+    r5 = re.match(template, "ugly")
+    print(r1)
+    print(r2)
+    print(r3)
+    print(r4)
+    print(r5)
+
+    template = r"(python|kotlin) (course|lesson)"
+    r1 = re.match(template, "kotlin")  # no match
+    r2 = re.match(template, "lesson")  # no match
+    r3 = re.match(template, "python lesson")  # match
+    r4 = re.match(template, "kotlin course")  # match
+    print(r1)
+    print(r2)
+    print(r3)
+    print(r4)
+
+    template = r'([Dd]ogs?)|([Cc]ats])'
+    r1 = re.match(template, 'Dogs are the best!')
+    print(r1)
+    print(r1.groups())
+
+
+def at_name():
+    string = input()
+    pattern = r'(?<=@)\w+'
+    results = re.search(pattern, string)
+    print(results.group())
+
+
+def hyphen_name():
+    string = input()
+    pattern = r'(?<=-)\w+'
+    results = re.search(pattern, string)
+    print(results.group())
+
+
+def get_ordered_lists():
+    string = '<li>Sister</li> <li>Father</li> <li>Mother-in-law</li>'
+    pattern = r'[^>]+(?=</li>)'
+    results = re.findall(pattern, string)
+    print(*results, sep='\n')
+
+
+def de_name():
+    names = ['Catherine de Medicis', 'Charles de Medicis', 'Charles de Bourbon', 'Catherine de Bourbon']
+    # template = r'[\w]+( de )[\w]+'
+    template = "(Charles|Catherine) de (Medicis|Bourbon)"
+    for name in names:
+        print(re.match(template, name).group())
+
+
+def template_error():
+    error_list = ['ValueError', 'NameError', 'TypeError']
+    template = r'(Value|Name|Type)Error'
+    r1 = re.match(template, error_list[0]).group(1)
+    r2 = re.match(template, error_list[1]).group(1)
+    r3 = re.match(template, error_list[2]).group(1)
+    print(r1)
+    print(r2)
+    print(r3)
 
 
 def check_user_name(user_name):
@@ -474,6 +647,10 @@ def check_user_name(user_name):
 
 
 if __name__ == '__main__':
+    # at_name()
+    # hyphen_name()
+    # get_ordered_lists()
+
     the_group()
     match_index()
     function_flags()
@@ -485,6 +662,12 @@ if __name__ == '__main__':
 
     look_around()
 
+    groups_quantifiers_nesting()
+    method_groups()
+    alterations()
+
+    de_name()
+    template_error()
     # check_user_name('1abc')
     # check_user_name('abc')
 
