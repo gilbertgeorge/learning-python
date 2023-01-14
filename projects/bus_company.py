@@ -132,8 +132,16 @@ class BusCompany:
 
     def validate_bus_types(self):
         validation = True
+        demand_stops = set()
+        non_demand_stops = set()
         print('On demand stops test:')
-        print(self.bus_line)
+        for bus_id, bus_stop in self.bus_line.items():
+            demand_stops = demand_stops.union(bus_stop["demand"])
+            non_demand_stops = non_demand_stops.union(bus_stop["start"].union(bus_stop["interim"]).union(bus_stop["finish"]))
+        overlap = demand_stops.intersection(non_demand_stops)
+        if overlap:
+            print(f'Wrong stop type: {sorted(list(overlap))}')
+            validation = False
         return validation
 
     def add_bus_line_entry(self, bus_entry):
