@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+from lxml import etree
 
 
 def get_soup():
@@ -33,7 +34,56 @@ def get_subtitles():
     print(subtitles[index].text)
 
 
+def read_file(path):
+    with open(path, 'r') as file:
+        contents = file.read()
+        soup = BeautifulSoup(contents, "xml")
+    print(soup.prettify())
+
+    tag1 = soup.find("title")
+    print(tag1)  # <title year="1994">Pulp Fiction</title>
+    tag2 = soup.find_all("director")
+    print(tag2)  # [<director>Quentin Tarantino</director>, <director>David Lynch</director>]
+    tag3 = soup.find("title", {"year": "1994"})
+    print(tag3)  # <title year="1994">Pulp Fiction</title>
+
+    print(soup.director)
+    print(tag3.parent)
+    tag4 = soup.find("movie")
+    print(list(tag4.children))
+    tag5 = soup.find("director")
+    print(tag5.previous_sibling)  # \n
+    print(list(tag5.previous_siblings))  # ['\n', <title year="1994">Pulp Fiction</title>, '\n']
+    tag3 = soup.find("title", {"year": "1994"})
+    print(tag3.next_sibling)  # \n
+    print(list(tag3.next_siblings))  # ['\n', <director>Quentin Tarantino</director>, '\n']
+
+
+def create_xml():
+    xml_string = "<a><b>hello</b></a>"
+
+    root = etree.fromstring(xml_string)
+
+    print(type(root))  # <class 'lxml.etree._Element'>
+
+
+def read_xml(xml_path):
+    tree = etree.parse(xml_path)
+    # print(type(tree))  # <class 'lxml.etree._ElementTree'>
+
+    root = tree.getroot()
+    # print(type(root))  # <class 'lxml.etree._Element'>
+    etree.dump(root)
+    etree.dump(root[1])
+
+
 if __name__ == '__main__':
     # pip install beautifulsoup4
     # get_soup()
-    get_subtitles()
+    # get_subtitles()
+    # read_file(r'..\supplemental\xml\xml_file.xml')
+
+    # pip install lxml
+    create_xml()
+    read_xml(r'..\supplemental\xml\xml_file.xml')
+    requests.post('http://movies.com/users/1234/ratings', {'movie_name': 'Frozen', 'movie_rating': '10'})
