@@ -1,6 +1,6 @@
 import time
 import _thread
-from threading import Thread
+from threading import Thread, Lock, Semaphore
 
 
 def greet(lock_object):
@@ -116,9 +116,60 @@ def lets_count():
     thread_3.start()
 
 
+l = Lock()
+total = 0
+sem = Semaphore(3)
+
+
+def calc_price(name, item_price):
+    for i in range(3):
+        l.acquire()
+        print("Item:", name)
+        time.sleep(2)
+        total = item_price
+        print("Price:", total)
+        l.release()
+
+
+def lock_race():
+    t1 = Thread(target=calc_price, args=("Shirt", 5))
+    t2 = Thread(target=calc_price, args=("Jeans", 10))
+
+    t1.start()
+    t2.start()
+
+
+def new_calc_price(name, item_price):
+    with sem:
+        for i in range(2):
+            print("Item:", name)
+            time.sleep(10)
+            total = item_price
+            print("Price:", total)
+
+
+def semaphore_race():
+    # creating multiple threads
+    t1 = Thread(target=new_calc_price, args=("Shirt", 5))
+    t2 = Thread(target=new_calc_price, args=("Jeans", 10))
+    t3 = Thread(target=new_calc_price, args=("Dress", 12))
+    t4 = Thread(target=new_calc_price, args=("Belt", 3))
+    t5 = Thread(target=new_calc_price, args=("Bag", 20))
+
+    # calling the threads
+    t1.start()
+    t2.start()
+    t3.start()
+    t4.start()
+    t5.start()
+
+
 if __name__ == '__main__':
     # use__thread()
     # use_threading()
     # threading_example_one()
     # threading_example_two()
-    lets_count()
+    # lets_count()
+
+    # lock_race()
+    semaphore_race()

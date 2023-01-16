@@ -172,7 +172,18 @@ def math_e():
     print(math.expm1(x)-1)
 
 
+def multiply(a, b):
+    # base case
+    if a == 1:
+        return b
+    # recursive case
+    return multiply(a-1, b) + b
+
+
 if __name__ == '__main__':
+    print(multiply(1, 1))
+    print(multiply(2, 1))
+    print(multiply(2, 3))
     math_e()
     # print(find_years())
 
@@ -192,4 +203,3 @@ if __name__ == '__main__':
     print(*name, sep='')
     print(*name, sep='-', end='!')
     print()
-

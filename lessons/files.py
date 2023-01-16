@@ -1,3 +1,6 @@
+import glob
+
+
 def create_file():
     test_file = open('../supplemental/animals.txt', 'w', encoding='UTF-16')
     test_file.close()
@@ -51,6 +54,27 @@ def write_lines():
     name_file.close()
 
 
+def read_file_with_glob():
+    location = r'..\supplemental\*.txt'
+    print(f'Find: {location}')
+    for file in glob.glob(r'..\supplemental\*.txt', recursive=True):
+        print(file)
+
+
+def i_glob():
+    print('i_glob')
+    generator = glob.iglob('..\\supplemental\\[0-9][0-9].*')
+
+    for item in generator:
+        print(item)
+
+
+def escape_glob():
+    glob.escape('my_dir\\[dir]')  # returns: 'my_dir\\[[]dir]'
+    # now we pass the result to the glob() method:
+    glob.glob('my_dir\\[[]dir]')  # returns: ['my_dir\\[dir]']
+
+
 if __name__ == '__main__':
     # create_file()
 
@@ -67,5 +91,8 @@ if __name__ == '__main__':
     # the_file = input('Enter filename to write to: ')
     # the_text = input('Enter the text to write: ')
     # write_file(the_file, the_text)
-    write_lines()
+    # write_lines()
 
+    # glob
+    read_file_with_glob()
+    i_glob()
